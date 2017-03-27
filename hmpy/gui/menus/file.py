@@ -23,7 +23,7 @@ class FileMenu(QMenu):
             self.addAction(action)
 
     def set_actions(self):
-        """Initialize all QActions for the FileMenu."""
+        """Initialize all QActions for the FileMenu. Populate __actions."""
         exit_action = QAction('&Quit', self)
         exit_action.triggered.connect(qApp.quit)
 

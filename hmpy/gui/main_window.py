@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow
 from hmpy.gui.dashboard import ComponentDashboard
 from hmpy.gui.menus.file import FileMenu
+from hmpy.gui.menus.config import ConfigureMenu
 
 
 class MainWindow(QMainWindow):
@@ -14,10 +15,10 @@ class MainWindow(QMainWindow):
         self.init_menu()
         self.showMaximized()
 
-
     def init_menu(self):
         """Initialize and populate the QMenuBar.
         """
         menu_bar = self.menuBar()
         menu_bar.addMenu(FileMenu(menu_bar))
+        menu_bar.addMenu(ConfigureMenu(menu_bar))
 
