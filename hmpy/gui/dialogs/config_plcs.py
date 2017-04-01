@@ -7,7 +7,6 @@ class ConfigurePLCsDialog(QDialog):
     def __init__(self, parent=None):
         """Initialize and populate the QDialog
 
-        Args:
-            parent: The parent QWidget. Defaults to None
+        :param parent: The parent QWidget. Defaults to None
         """
         super(ConfigurePLCsDialog, self).__init__(parent)

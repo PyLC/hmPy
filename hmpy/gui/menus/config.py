@@ -3,17 +3,12 @@ from hmpy.gui.dialogs.config_plcs import ConfigurePLCsDialog
 
 
 class ConfigureMenu(QMenu):
-    """Configuration QMenu for hmpy.
-
-    Attributes:
-        __actions: List of QActions populating the configuration QMenu
-    """
+    """Configuration QMenu for hmpy."""
 
     def __init__(self, parent=None):
         """Initialize and populate ConfigureMenu.
 
-        Args:
-            parent: The parent QMenuBar. Defaults to None
+        :param parent: The parent QMenuBar. Defaults to None
         """
         super(ConfigureMenu, self).__init__("&Configure", parent)
         self.__actions = []
@@ -22,7 +17,7 @@ class ConfigureMenu(QMenu):
             self.addAction(action)
 
     def set_actions(self):
-        """Initialize all QActions for the ConfigureMenu.  Populate __actions."""
+        """Initialize all QActions for the ConfigureMenu. Populate __actions"""
         plcs_action = QAction("&PLCs", self)
         plcs_action.triggered.connect(ConfigurePLCsDialog(self).exec_)
 

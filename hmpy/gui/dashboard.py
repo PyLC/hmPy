@@ -7,8 +7,7 @@ class ComponentDashboard(QWidget):
     def __init__(self, parent=None):
         """Initialize the dashboard QWidget
 
-        Args:
-            parent: The parent QWidget. Defaults to None.
+        :param parent: The parent QWidget. Defaults to None.
         """
         super(ComponentDashboard, self).__init__(parent)
 

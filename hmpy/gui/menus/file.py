@@ -2,19 +2,12 @@ from PyQt5.QtWidgets import QMenu, QAction, qApp
 
 
 class FileMenu(QMenu):
-    """File QMenu for hmpy.
-
-    Attributes:
-        __actions: List of QActions populating the FileMenu
-    """
-
-    __actions = None
+    """File QMenu for hmpy."""
 
     def __init__(self, parent=None):
         """Initialize and populate FileMenu.
 
-        Args:
-            parent: The parent QMenuBar. Defaults to None
+        :param parent: The parent QMenuBar. Defaults to None
         """
         super(FileMenu, self).__init__("&File", parent)
         self.__actions = []

@@ -16,8 +16,7 @@ class MainWindow(QMainWindow):
         self.showMaximized()
 
     def init_menu(self):
-        """Initialize and populate the QMenuBar.
-        """
+        """Initialize and populate the QMenuBar."""
         menu_bar = self.menuBar()
         menu_bar.addMenu(FileMenu(menu_bar))
         menu_bar.addMenu(ConfigureMenu(menu_bar))
