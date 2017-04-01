@@ -9,4 +9,4 @@ class ConfigurePLCsDialog(QDialog):
 
         :param parent: The parent QWidget. Defaults to None
         """
-        super(ConfigurePLCsDialog, self).__init__(parent)
+        super().__init__(parent)

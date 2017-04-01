@@ -9,7 +9,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         """Initialize the MainWindow."""
-        super(MainWindow, self).__init__()
+        super().__init__()
         self.setCentralWidget(ComponentDashboard(self))
         self.setWindowTitle("hmPy")
         self.init_menu()

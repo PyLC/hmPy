@@ -9,7 +9,7 @@ class ComponentDashboard(QWidget):
 
         :param parent: The parent QWidget. Defaults to None.
         """
-        super(ComponentDashboard, self).__init__(parent)
+        super().__init__(parent)
 
         grid = QGridLayout()
         self.setLayout(grid)

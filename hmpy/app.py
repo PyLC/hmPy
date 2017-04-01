@@ -11,7 +11,7 @@ class Application(QApplication):
 
         :param args: the application arguments
         """
-        super(Application, self).__init__(args)
+        super().__init__(args)
         self.__main_window = MainWindow()
 
 

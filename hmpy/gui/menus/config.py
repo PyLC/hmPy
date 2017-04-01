@@ -10,7 +10,7 @@ class ConfigureMenu(QMenu):
 
         :param parent: The parent QMenuBar. Defaults to None
         """
-        super(ConfigureMenu, self).__init__("&Configure", parent)
+        super().__init__("&Configure", parent)
         self.__actions = []
         self.set_actions()
         for action in self.__actions:

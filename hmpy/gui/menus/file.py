@@ -9,7 +9,7 @@ class FileMenu(QMenu):
 
         :param parent: The parent QMenuBar. Defaults to None
         """
-        super(FileMenu, self).__init__("&File", parent)
+        super().__init__("&File", parent)
         self.__actions = []
         self.set_actions()
         for action in self.__actions:
