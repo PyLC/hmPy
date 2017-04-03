@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QDialog, QGridLayout, QLineEdit, QDialogButtonBox, Q
 
 
 class AddPLCDialog(QDialog):
-    """QDialog for managing/configuring PLCs"""
+    """QDialog for adding a PLC"""
 
 
     def __init__(self, parent=None):
