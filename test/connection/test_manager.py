@@ -21,14 +21,15 @@ class TestConnectionManager(unittest.TestCase):
 
     def test_connect(self):
         """Test adding a valid connection."""
-        connection = self.manager.connect(self.connection_name, self.connection_address, self.connection_port, self.connection_type)
+        connection = self.manager.connect(self.connection_name, self.connection_address, self.connection_port,
+                                          self.connection_type)
         self.assertIsInstance(connection, Connection)
 
     def test_duplicate_connect(self):
         """Test adding a connection where a connection with the same name already exists."""
         self.manager.connect(self.connection_name, self.connection_address, self.connection_port, self.connection_type)
         with self.assertRaises(ValueError):
-           self.manager.connect(self.connection_name, "127.0.0.2", 504, ModbusConnection)
+            self.manager.connect(self.connection_name, "127.0.0.2", 504, ModbusConnection)
 
     def test_disconnect_valid(self):
         """Test removing a connection that exists."""
@@ -51,7 +52,7 @@ class TestConnectionManager(unittest.TestCase):
     def test_has_get_connection_valid(self):
         """Test getting and checking for a connection when it exists."""
         connection = self.manager.connect(self.connection_name, self.connection_address, self.connection_port,
-                                     self.connection_type)
+                                          self.connection_type)
         self.assertIsInstance(connection, Connection)
 
         has = self.manager.has_connection(self.connection_name)

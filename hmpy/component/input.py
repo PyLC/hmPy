@@ -28,13 +28,14 @@ class Input(QObject):
     def init_timer(self):
         """Initialize/start the polling timer"""
         self.__timer = QTimer()
-        self.__timer.setInterval(100)
+        self.__timer.setInterval(self.__interval)
         self.__timer.timeout.connect(self.read)
         self.__timer.start(0)
 
     def read(self):
         """Read a value from the plc. Executed on timer timeout."""
         value = self.__connection.read(self.__register_type, self.__address, 1)
+
         if not value is None:
             self.value = value
 
