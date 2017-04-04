@@ -1,13 +1,19 @@
 from pymodbus3.client.sync import ModbusTcpClient as ModbusClient
+from pymodbus3.exceptions import ModbusException
 from . import Connection
 from PyQt5.QtCore import pyqtSignal
+
+import logging
+logging.basicConfig()
+log = logging.getLogger()
+log.setLevel(logging.DEBUG)
 
 
 class ModbusConnection(Connection):
 
     connectedChanged = pyqtSignal(bool)
 
-    def __init__(self, connection_ip="127.0.0.1", connection_port=502):
+    def __init__(self, connection_ip, connection_port):
         """
         :param connection_ip IP to connected to, default 127.0.0.1
         :type connection_ip: str
@@ -18,6 +24,7 @@ class ModbusConnection(Connection):
         self.__connection_ip = connection_ip
         self.__connection_port = connection_port
         self.__connected = False
+        self.__client = None  # Added due to pep8 linting
 
     def connect(self):
         """
@@ -40,46 +47,87 @@ class ModbusConnection(Connection):
     @connected.setter
     def connected(self, value):
         """Setter for connected attribute"""
-        self.__connected = value;
+        self.__connected = value
         self.connectedChanged.emit(value)
-
-    def set_connected(self, connected):
-        """Set the connection state
-
-        :param connected: boolean representing connection state
-        """
-        self.connected = connected
-        self.connectedChanged.emit(connected)
 
     def write(self, mem_type, address, value):
         """
         :param mem_type: Constant signifying the type of memory to be written
         :param address: Address or number of the area to be written
         :param value: Value to be written to the PLC
-        :return: Details of the request (use request.~) or None if there was no connection
+        :return: Void
         """
-        request = None
         if self.connected:
-            if mem_type == Connection.WRITE_REGISTER:
-                request = self.__client.write_register(address, value)
+            if mem_type == Connection.HOLDING_REGISTER:
+                self.__client.write_register(address, value)
+            elif mem_type == Connection.COIL:
+                self.__client.write_coil(address, value)
             else:
-                request = self.__client.write_coil(address, value)
-        return request
+                raise AttributeError
 
-    def read(self, mem_type, address, count):
+    def read(self, mem_type, address, count=1):
         """
-        :param mem_type: Constant signifying the type of memory to be read
-        :param address: Address or number of the area to be read
-        :param count: Number of bits to read
-        :return: Response from the PLC, or None if there was no connection
+        Method to read values from a connected PLC
+        :param mem_type: Constant signifying the type of memory to be read 
+        :param address: Address or number of the 
+        area to be read 
+        :param count: Optional number of registers/coils to read. Defaulted to 1 
+        :return: Response from the PLC, or None if there was an error with the read (Exception reading, no connection) 
+        coils return boolean, while registers return (if count>1 list of) ints 
         """
         response = None
         if self.connected:
-            if mem_type == Connection.READ_REGISTER:
-                response = self.__client.read_holding_registers(address, count)
+            if mem_type == Connection.COIL or mem_type == Connection.DISCRETE_REGISTER:
+                response = self.__read_coil(mem_type, address, count)
             else:
-                response = self.__client.read_coils(address, count)
+                response = self.__read_register(mem_type, address, count)
         return response
 
     def get_connected(self):
         return self.connected
+
+    def __read_coil(self, mem_type, address, count):
+        """
+        Helper method for reading coils
+        :param address: Address or number of the area to be read
+        :param count: Number of bits to read
+        :return: Boolean coil value
+        """
+
+        try:
+            if mem_type == Connection.DISCRETE_REGISTER:
+                response = self.__client.read_discrete_inputs(address, count)
+            else:
+                response = self.__client.read_coils(address, count)
+            if count > 1:
+                response = response.bits[:count]
+            else:
+                response = response.bits[0]
+        except ModbusException:
+            response = None
+        except AttributeError:  # If there are no bits to the response object something went wrong
+            response = None
+        return response
+
+    def __read_register(self, reg_type, address, count):
+        """
+        Helper method for reading holding registers
+        :param: reg_type: Register type for reading
+        :param address: Address or number of the area to be read
+        :param count: Number of bits to read
+        :return: Int register value
+        """
+        try:
+            if reg_type == Connection.HOLDING_REGISTER:
+                response = self.__client.read_holding_registers(address, count)
+            elif reg_type == Connection.INPUT_REGISTER:
+                response = self.__client.read_input_registers(address, count)
+            if count > 1:
+                response = response.registers[:count]
+            else:
+                response = response.registers[0]
+        except ModbusException:
+            response = None
+        except AttributeError:  # If there are no bits to the response object something went wrong
+            response = None
+        return response
