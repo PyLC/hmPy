@@ -17,7 +17,7 @@ class ModbusConnection(Connection):
         """
         :param connection_ip IP to connected to, default 127.0.0.1
         :type connection_ip: str
-        :param connection_port Port to connect to, default is 502
+        :param connection_port: Port to connect to, default is 502
         :type connection_port: int
         """
         super().__init__()
@@ -29,6 +29,7 @@ class ModbusConnection(Connection):
     def connect(self):
         """
         Connect the component to the PLC with the information given from the constructor
+
         :return: True or false based on the connection
         """
         self.__client = ModbusClient(self.__connection_ip, self.__connection_port)
@@ -36,12 +37,30 @@ class ModbusConnection(Connection):
         return self.connected
 
     def disconnect(self):
+        """Close the ModBus client connection."""
         self.__client.close()
         self.connected = False
 
+    def get_address(self):
+        """Get the connection address
+
+        :return: __connection_ip
+        """
+        return self.__connection_ip
+
+    def get_port(self):
+        """Get the connection port.
+
+        :return: __connection_port
+        """
+        return self.__connection_port
+
     @property
     def connected(self):
-        """Accessor for connected attribute"""
+        """Accessor for connected attribute
+
+        :return: __connected
+        """
         return self.__connected
 
     @connected.setter

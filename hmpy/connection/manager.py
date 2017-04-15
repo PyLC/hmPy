@@ -26,7 +26,6 @@ class ConnectionManager(QObject):
             raise ValueError("A connection already exists with that name")
 
         connection = connection_type(address, port)
-
         connection.connect()
         self.__connections[name] = connection
         self.connections_changed.emit()

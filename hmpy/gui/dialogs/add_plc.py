@@ -103,7 +103,6 @@ class AddPLCDialog(QDialog):
         """Ok clicked, process form"""
         if self.add_plc():
             QDialog.accept(self)
-            self.reset_inputs()
 
     def reject(self):
         """Cancel clicked, close dialog"""
@@ -148,10 +147,3 @@ class AddPLCDialog(QDialog):
         msg_box.setDefaultButton(QMessageBox.Ok)
         msg_box.setWindowTitle("Error")
         msg_box.exec_()
-
-    def reset_inputs(self):
-        """Reset inputs to their default state."""
-        self.name_textbox.clear()
-        self.address_textbox.clear()
-        self.port_textbox.clear()
-        self.connection_type_combobox.setCurrentIndex(0)
