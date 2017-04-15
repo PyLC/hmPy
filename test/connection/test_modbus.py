@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 from hmpy.connection import Connection
-from hmpy.connection.modbus import ModbusConnection
+from hmpy.connection.types.modbus import ModbusConnection
 from pymodbus3.client.sync import ModbusTcpClient as ModbusClient
 from pymodbus3.register_read_message import ReadInputRegistersResponse
 from pymodbus3.bit_read_message import ReadDiscreteInputsResponse
