@@ -1,6 +1,10 @@
 import unittest
+from unittest.mock import patch
 from hmpy.connection import Connection
 from hmpy.connection.modbus import ModbusConnection
+from pymodbus3.client.sync import ModbusTcpClient as ModbusClient
+from pymodbus3.register_read_message import ReadInputRegistersResponse
+from pymodbus3.bit_read_message import ReadDiscreteInputsResponse
 
 
 class TestModbusConnection(unittest.TestCase):
@@ -9,34 +13,49 @@ class TestModbusConnection(unittest.TestCase):
     def setUp(self):
         """Initialize necessary data connection"""
         self.connection = ModbusConnection("127.0.0.1", 502)
+        self.triggered = False
+        self.connection.connectedChanged.connect(self.set_triggered)
 
     def tearDown(self):
         """Disconnection from any external resources"""
         self.connection.disconnect()
 
-    def test_connect(self):
-        self.connection.connect()
-        self.assertTrue(self.connection.connectedChanged)
-        self.assertTrue(self.connection.connected)
+    def set_triggered(self):
+        self.triggered = True
 
-        # Not entirely sure how to split these up. Stuff needs to be written to be read.
-    def test_read_write_coil(self):
+    @patch.object(ModbusClient, 'connect')
+    def test_connect(self, mock_connect):
+        self.connection.connect()
+        mock_connect.assert_called_once()
+        self.assertTrue(self.connection.connected)
+        self.assertTrue(self.triggered)
+
+    @patch.object(ModbusClient, 'write_coil')
+    @patch.object(ModbusClient, 'connect')
+    def test_write_coil(self, mock_connect, mock_write):
         self.connection.connect()
         self.connection.write(Connection.COIL, 1, True)
-        self.assertTrue(self.connection.read(Connection.COIL, 1, 1))
+        mock_write.assert_called_once_with(1, True)
 
-    def test_read_write_holding_register(self):
+    @patch.object(ModbusClient, 'write_register')
+    @patch.object(ModbusClient, 'connect')
+    def test_write_holding_register(self, mock_connect, mock_write):
         self.connection.connect()
         self.connection.write(Connection.HOLDING_REGISTER, 1, 10)
-        self.assertEqual(self.connection.read(Connection.HOLDING_REGISTER, 1, 1), 10)
+        mock_write.assert_called_once_with(1, 10)
 
-    def read_input_register(self):
+    @patch.object(ModbusClient, 'read_input_registers')
+    @patch.object(ModbusClient, 'connect')
+    def test_read_input_register(self, mock_connect, mock_read):
         self.connection.connect()
+        mock_read.return_value = ReadInputRegistersResponse([0])
         self.assertEqual(self.connection.read(Connection.INPUT_REGISTER, 1, 1), 0)
+        mock_read.assert_called_once_with(1, 1)
 
-    def test_read_discrete_register(self):
+    @patch.object(ModbusClient, 'read_discrete_inputs')
+    @patch.object(ModbusClient, 'connect')
+    def test_read_discrete_register(self, mock_connect, mock_read):
         self.connection.connect()
+        mock_read.return_value = ReadDiscreteInputsResponse([False])
         self.assertFalse(self.connection.read(Connection.DISCRETE_REGISTER, 1, 1))
-
-if __name__ == '__main__':
-    unittest.main()
+        mock_read.assert_called_once_with(1, 1)
