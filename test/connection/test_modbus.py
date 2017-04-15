@@ -14,7 +14,7 @@ class TestModbusConnection(unittest.TestCase):
         """Initialize necessary data connection"""
         self.connection = ModbusConnection("127.0.0.1", 502)
         self.triggered = False
-        self.connection.connectedChanged.connect(self.set_triggered)
+        self.connection.connected_changed.connect(self.set_triggered)
 
     def tearDown(self):
         """Disconnection from any external resources"""

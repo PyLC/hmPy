@@ -11,7 +11,7 @@ log.setLevel(logging.DEBUG)
 
 class ModbusConnection(Connection):
 
-    connectedChanged = pyqtSignal(bool)
+    connected_changed = pyqtSignal(bool)
 
     def __init__(self, connection_ip, connection_port):
         """
@@ -48,7 +48,7 @@ class ModbusConnection(Connection):
     def connected(self, value):
         """Setter for connected attribute"""
         self.__connected = value
-        self.connectedChanged.emit(value)
+        self.connected_changed.emit(value)
 
     def write(self, mem_type, address, value):
         """
