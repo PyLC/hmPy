@@ -128,6 +128,12 @@ class AddPLCDialog(QDialog):
             return self.input_error("Please input a valid IP address")
         if not port or self.port_textbox_validator.validate(port, 0)[0] != QIntValidator.Acceptable:
             return self.input_error("Please input a valid port")
+
+        # Check for an existing connection with the same name
+        if self.gui.connection_manager.has_connection(name):
+            return self.input_error("A PLC named %s already exists" % name)
+
+        self.gui.connection_manager.add(name, address, port, connection_type)
         return True
 
     def input_error(self, msg):
