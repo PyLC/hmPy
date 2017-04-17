@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QTreeWidget, QTreeWidgetItem, QGridLayout, QVBoxLayout, \
-    QPushButton, QMessageBox, QHeaderView
+from PyQt5.QtWidgets import QDialog,  QTreeWidget, QTreeWidgetItem, QHBoxLayout, QVBoxLayout, QPushButton, QMessageBox
 from PyQt5.QtCore import Qt
 from hmpy.gui.dialogs.add_plc import AddPLCDialog
 
@@ -21,20 +20,7 @@ class ConfigurePLCsDialog(QDialog):
     def init_ui(self):
         """Initialize and populate the Configure PLCs dialog"""
 
-        # set object name for future reference
-        self.setObjectName("ComponentConfig")
-
-        # create grid layout
-        grid = QGridLayout()
-        grid.setSpacing(10)
-
-        # create button box for ok and cancel buttons
-        self.ok_btn_box = QDialogButtonBox()
-        self.ok_btn_box.setOrientation(Qt.Horizontal)
-        self.ok_btn_box.setStandardButtons(QDialogButtonBox.Ok)
-        self.ok_btn_box.setObjectName("ok_btn")
-
-        # create main display ie tree widget
+        # create main display tree widget
         self.plc_display = QTreeWidget()
         self.plc_display.setObjectName("plc_display")
 
@@ -44,32 +30,32 @@ class ConfigurePLCsDialog(QDialog):
         self.plc_display.headerItem().setText(2, "Port")
         self.plc_display.headerItem().setText(3, "Connection Type")
         self.plc_display.headerItem().setText(4, "Status")
-        self.plc_display.setMinimumSize(500, 150)
         self.plc_display.currentItemChanged.connect(self.selection_changed)
+        self.plc_display.setMinimumSize(self.get_plc_display_width(), 150)
 
         # create add button
-        self.btn_add = QPushButton()
+        self.btn_add = QPushButton("Add")
         self.btn_add.setObjectName("btn_add")
-        self.btn_add.setText("Add")
         self.btn_add.clicked.connect(self.on_add)
 
         # create modify button
-        self.btn_modify = QPushButton()
+        self.btn_modify = QPushButton("Modify")
         self.btn_modify.setObjectName("btn_modify")
-        self.btn_modify.setText("Modify")
         self.btn_modify.setEnabled(False)
 
         # create remove button
-        self.btn_remove = QPushButton()
+        self.btn_remove = QPushButton("Remove")
         self.btn_remove.setObjectName("btn_remove")
-        self.btn_remove.setText("Remove")
         self.btn_remove.setEnabled(False)
         self.btn_remove.clicked.connect(self.on_remove)
 
+        # create back button
+        self.btn_back = QPushButton("Back")
+        self.btn_back.setObjectName("btn_back")
+        self.btn_back.clicked.connect(self.accept)
+
         # create vertical button box
         self.vertical_btns = QVBoxLayout()
-        self.vertical_btns.setContentsMargins(10, 10, 10, 10)
-        self.vertical_btns.setSpacing(10)
         self.vertical_btns.setObjectName("vertical_btns")
 
         # populate vertical button box
@@ -77,21 +63,28 @@ class ConfigurePLCsDialog(QDialog):
         self.vertical_btns.addWidget(self.btn_modify, alignment=Qt.AlignCenter)
         self.vertical_btns.addWidget(self.btn_remove, alignment=Qt.AlignCenter)
         self.vertical_btns.addStretch()
+        self.vertical_btns.addWidget(self.btn_back, alignment=Qt.AlignCenter)
 
-        # set layout for components in grid layout
-        grid.addWidget(self.plc_display, 0, 0)
-        grid.addWidget(self.ok_btn_box, 1, 0)
-        grid.addItem(self.vertical_btns, 0, 1)
-
-        # set button actions for cancel and ok buttons
-        self.ok_btn_box.accepted.connect(self.accept)
+        # Create/populate main layout
+        self.main_layout = QHBoxLayout()
+        self.main_layout.addWidget(self.plc_display)
+        self.main_layout.addLayout(self.vertical_btns)
 
         # set window properties
-        self.setWindowTitle("Configure PLC's")
-        self.setLayout(grid)
+        self.setObjectName("plc_config")
+        self.setWindowTitle("Configure PLCs")
+        self.setLayout(self.main_layout)
+
+    def get_plc_display_width(self):
+        """Calculate the minimum width of the plc_display.
+
+        :return: Sum of the section sizes."""
+        col_count = self.plc_display.columnCount()
+        section_sizes = list(map(lambda i: self.plc_display.header().sectionSize(i), range(0, col_count)))
+        return sum(section_sizes)
 
     def selection_changed(self, current, previous):
-        """Enable/disable buttons based on plc_view selection"""
+        """Enable/disable buttons based on plc_display selection"""
         if current is None:
             self.btn_remove.setEnabled(False)
             self.btn_modify.setEnabled(False)
@@ -118,7 +111,7 @@ class ConfigurePLCsDialog(QDialog):
         self.gui.connection_manager.destroy(name)
 
     def connections_changed(self):
-        """Repopulate the plc_view, triggered by the connection managers connections_changed signal."""
+        """Repopulate the plc_display, triggered by the connection managers connections_changed signal."""
         connections = self.gui.connection_manager.get_connections()
         self.plc_display.clear()
         for key, con in connections.items():
