@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QDialog, QTreeWidget, QHBoxLayout, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QDialog, QTreeWidget, QTreeWidgetItem, QHBoxLayout, QVBoxLayout, QPushButton, QMessageBox
 from PyQt5.QtCore import Qt
+from hmpy.gui.dialogs.add_component import AddComponentDialog
 
 
 class ConfigureComponentsDialog(QDialog):
@@ -13,6 +14,7 @@ class ConfigureComponentsDialog(QDialog):
         """
         super().__init__(parent)
         self.gui = parent
+        self.gui.component_manager.components_changed.connect(self.on_components_changed)
         self.init_ui()
 
     def init_ui(self):
@@ -31,6 +33,7 @@ class ConfigureComponentsDialog(QDialog):
         # create add button
         self.btn_add = QPushButton("Add")
         self.btn_add.setObjectName("btn_add")
+        self.btn_add.clicked.connect(self.on_add)
 
         # create modify button
         self.btn_modify = QPushButton("Modify")
@@ -41,7 +44,7 @@ class ConfigureComponentsDialog(QDialog):
         self.btn_remove = QPushButton("Remove")
         self.btn_remove.setObjectName("btn_remove")
         self.btn_remove.setEnabled(False)
-
+        self.btn_remove.clicked.connect(self.on_remove)
         # create back button
         self.btn_back = QPushButton("Back")
         self.btn_back.setObjectName("btn_back")
@@ -85,3 +88,25 @@ class ConfigureComponentsDialog(QDialog):
             self.btn_modify.setEnabled(True)
             self.btn_remove.setEnabled(True)
 
+    def on_add(self):
+        """Open an AddComponentDialog."""
+        AddComponentDialog(self.gui).exec_()
+
+    def on_remove(self):
+        """Remove the selected component when the Remove button is clicked."""
+        selected = self.component_display.currentItem()
+        name = selected.text(0)
+
+        confirm = QMessageBox()
+        confirm.setText("Are you sure you want to remove %s?" % name)
+        confirm.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        result = confirm.exec_()
+        if result == QMessageBox.Yes:
+            self.gui.component_manager.remove(name)
+
+    def on_components_changed(self):
+        """Repopulate the component_display when the ComponentManager signals that there are changes."""
+        components = self.gui.component_manager.get_components()
+        self.component_display.clear()
+        for key, com in components.items():
+            self.component_display.addTopLevelItem(QTreeWidgetItem([key, com.__class__.__name__]))
