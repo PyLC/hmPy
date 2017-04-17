@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QMenu, QAction
 from hmpy.gui.dialogs.config_plcs import ConfigurePLCsDialog
+from hmpy.gui.dialogs.config_components import ConfigureComponentsDialog
 
 
 class ConfigureMenu(QMenu):
@@ -21,4 +22,9 @@ class ConfigureMenu(QMenu):
         """Initialize all QActions for the ConfigureMenu. Populate __actions"""
         plcs_action = QAction("&PLCs", self)
         plcs_action.triggered.connect(ConfigurePLCsDialog(self.gui).exec_)
+
+        components_action = QAction("&Components", self)
+        components_action.triggered.connect(ConfigureComponentsDialog(self.gui).exec_)
+
         self.__actions.append(plcs_action)
+        self.__actions.append(components_action)
