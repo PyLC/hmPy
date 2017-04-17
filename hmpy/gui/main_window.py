@@ -3,6 +3,7 @@ from hmpy.gui.dashboard import ComponentDashboard
 from hmpy.gui.menus.file import FileMenu
 from hmpy.gui.menus.config import ConfigureMenu
 from hmpy.connection.manager import ConnectionManager
+from hmpy.component.manager import ComponentManager
 
 
 class MainWindow(QMainWindow):
@@ -12,6 +13,7 @@ class MainWindow(QMainWindow):
         """Initialize the MainWindow."""
         super().__init__()
         self.connection_manager = ConnectionManager()
+        self.component_manager = ComponentManager()
         self.init_ui()
 
     def init_ui(self):
