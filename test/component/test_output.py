@@ -16,7 +16,7 @@ class TestOutput(unittest.TestCase):
 
     def test_write(self):
         """Test that changing the output value triggers a write on the connection with the appropriate values"""
-        register = Connection.COIL
+        register = Connection.Registers.COIL
         address = 0
         value = 1
         self.output = Output(register, address, self.connection)

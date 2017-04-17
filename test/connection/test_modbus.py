@@ -34,14 +34,14 @@ class TestModbusConnection(unittest.TestCase):
     @patch.object(ModbusClient, 'connect')
     def test_write_coil(self, mock_connect, mock_write):
         self.connection.connect()
-        self.connection.write(Connection.COIL, 1, True)
+        self.connection.write(Connection.Registers.COIL, 1, True)
         mock_write.assert_called_once_with(1, True)
 
     @patch.object(ModbusClient, 'write_register')
     @patch.object(ModbusClient, 'connect')
     def test_write_holding_register(self, mock_connect, mock_write):
         self.connection.connect()
-        self.connection.write(Connection.HOLDING_REGISTER, 1, 10)
+        self.connection.write(Connection.Registers.HOLDING_REGISTER, 1, 10)
         mock_write.assert_called_once_with(1, 10)
 
     @patch.object(ModbusClient, 'read_input_registers')
@@ -49,7 +49,7 @@ class TestModbusConnection(unittest.TestCase):
     def test_read_input_register(self, mock_connect, mock_read):
         self.connection.connect()
         mock_read.return_value = ReadInputRegistersResponse([0])
-        self.assertEqual(self.connection.read(Connection.INPUT_REGISTER, 1, 1), 0)
+        self.assertEqual(self.connection.read(Connection.Registers.INPUT_REGISTER, 1, 1), 0)
         mock_read.assert_called_once_with(1, 1)
 
     @patch.object(ModbusClient, 'read_discrete_inputs')
@@ -57,5 +57,5 @@ class TestModbusConnection(unittest.TestCase):
     def test_read_discrete_register(self, mock_connect, mock_read):
         self.connection.connect()
         mock_read.return_value = ReadDiscreteInputsResponse([False])
-        self.assertFalse(self.connection.read(Connection.DISCRETE_REGISTER, 1, 1))
+        self.assertFalse(self.connection.read(Connection.Registers.DISCRETE_REGISTER, 1, 1))
         mock_read.assert_called_once_with(1, 1)

@@ -23,7 +23,7 @@ class TestInput(unittest.TestCase):
 
     def test_trigger_changed(self):
         """Test that the valueChanged signal is emitted when the value is changed."""
-        self.input = Input(self.interval, Connection.COIL, 0, self.connection)
+        self.input = Input(self.interval, Connection.Registers.COIL, 0, self.connection)
         self.input.valueChanged.connect(self.succeed)
         self.connection.value = True
         QTest.qWait(self.interval * 5)
@@ -32,7 +32,7 @@ class TestInput(unittest.TestCase):
 
     def test_trigger_not_changed(self):
         """Test that the valueChanged signal is not emitted when the value does not change."""
-        self.input = Input(self.interval, Connection.COIL, 0, self.connection)
+        self.input = Input(self.interval, Connection.Registers.COIL, 0, self.connection)
         self.input.valueChanged.connect(self.succeed)
 
         QTest.qWait(self.interval * 5)
@@ -41,7 +41,7 @@ class TestInput(unittest.TestCase):
 
     def test_read_coil(self):
         """Test that the input read has the correct value."""
-        self.input = Input(self.interval, Connection.COIL, 0, self.connection)
+        self.input = Input(self.interval, Connection.Registers.COIL, 0, self.connection)
         self.connection.value = True
         QTest.qWait(self.interval * 5)
         self.assertTrue(self.input.value)

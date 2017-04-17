@@ -1,4 +1,5 @@
 import importlib, inspect, sys
+from enum import Enum
 from PyQt5.QtCore import QObject
 
 
@@ -13,12 +14,16 @@ def get_connection_types():
     return connection_types
 
 
-class Connection(QObject):
-
+class RegisterTypes(Enum):
     HOLDING_REGISTER = 1
     INPUT_REGISTER = 2
     DISCRETE_REGISTER = 3
     COIL = 4
+
+
+class Connection(QObject):
+
+    Registers = RegisterTypes
 
     def __init__(self):
         super().__init__()

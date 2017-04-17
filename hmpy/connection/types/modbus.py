@@ -3,11 +3,6 @@ from pymodbus3.exceptions import ModbusException
 from hmpy.connection import Connection
 from PyQt5.QtCore import pyqtSignal
 
-import logging
-logging.basicConfig()
-log = logging.getLogger()
-log.setLevel(logging.DEBUG)
-
 
 class ModbusConnection(Connection):
 
@@ -77,9 +72,9 @@ class ModbusConnection(Connection):
         :return: Void
         """
         if self.connected:
-            if mem_type == Connection.HOLDING_REGISTER:
+            if mem_type == Connection.Registers.HOLDING_REGISTER:
                 self.__client.write_register(address, value)
-            elif mem_type == Connection.COIL:
+            elif mem_type == Connection.Registers.COIL:
                 self.__client.write_coil(address, value)
             else:
                 raise AttributeError
@@ -96,7 +91,7 @@ class ModbusConnection(Connection):
         """
         response = None
         if self.connected:
-            if mem_type == Connection.COIL or mem_type == Connection.DISCRETE_REGISTER:
+            if mem_type == Connection.Registers.COIL or mem_type == Connection.Registers.DISCRETE_REGISTER:
                 response = self.__read_coil(mem_type, address, count)
             else:
                 response = self.__read_register(mem_type, address, count)
@@ -114,7 +109,7 @@ class ModbusConnection(Connection):
         """
 
         try:
-            if mem_type == Connection.DISCRETE_REGISTER:
+            if mem_type == Connection.Registers.DISCRETE_REGISTER:
                 response = self.__client.read_discrete_inputs(address, count)
             else:
                 response = self.__client.read_coils(address, count)
@@ -137,9 +132,9 @@ class ModbusConnection(Connection):
         :return: Int register value
         """
         try:
-            if reg_type == Connection.HOLDING_REGISTER:
+            if reg_type == Connection.Registers.HOLDING_REGISTER:
                 response = self.__client.read_holding_registers(address, count)
-            elif reg_type == Connection.INPUT_REGISTER:
+            elif reg_type == Connection.Registers.INPUT_REGISTER:
                 response = self.__client.read_input_registers(address, count)
             if count > 1:
                 response = response.registers[:count]
