@@ -90,7 +90,7 @@ class ConfigureComponentsDialog(QDialog):
 
     def on_add(self):
         """Open an AddComponentDialog."""
-        AddComponentDialog(self.gui).exec_()
+        AddComponentDialog(self.gui)
 
     def on_remove(self):
         """Remove the selected component when the Remove button is clicked."""

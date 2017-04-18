@@ -16,6 +16,7 @@ class AddPLCDialog(QDialog):
         self.gui = parent
         self.connection_types = get_connection_types()
         self.init_ui()
+        self.exec_()
 
     def init_ui(self):
         """Initialize and populate add PLC dialog"""

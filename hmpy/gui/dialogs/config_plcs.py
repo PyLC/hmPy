@@ -94,7 +94,7 @@ class ConfigurePLCsDialog(QDialog):
 
     def on_add(self):
         """Open an AddPLCDialog."""
-        AddPLCDialog(self.gui).exec_()
+        AddPLCDialog(self.gui)
 
     def on_remove(self):
         """Remove the selected connection."""
