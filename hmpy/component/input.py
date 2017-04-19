@@ -23,7 +23,8 @@ class Input(QObject):
         self.__address = address
         self.__connection = connection
         self.__value = None
-        self.__connection.deleted.connect(self.deleted)
+        if self.__connection is not None:
+            self.__connection.deleted.connect(self.deleted)
         self.init_timer()
 
     def init_timer(self):

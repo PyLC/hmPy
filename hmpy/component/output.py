@@ -16,7 +16,8 @@ class Output(QObject):
         super().__init__()
         self.__address = address
         self.__connection = connection
-        self.__connection.deleted.connect(self.deleted)
+        if self.__connection is not None:
+            self.__connection.deleted.connect(self.deleted)
         self.__value = None
 
     def write(self):
