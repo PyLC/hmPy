@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QObject, pyqtSlot
 
 
 class Output(QObject):
@@ -18,11 +18,12 @@ class Output(QObject):
         self.__register_type = register_type
         self.__address = address
         self.__connection = connection
+        self.__connection.deleted.connect(self.deleted)
         self.__value = None
 
     def write(self):
         """Write a value to a plc. Executed whenever the value attribute is changed."""
-        if not self.value is None:
+        if not self.value is None and self.__connection is not None:
             self.__connection.write(self.__register_type, self.__address, self.value)
 
     @property
@@ -34,3 +35,9 @@ class Output(QObject):
         if value != self.__value:
             self.__value = value
             self.write()
+
+    @pyqtSlot()
+    def deleted(self):
+        """When the connection (PLC) is deleted, this causes the connection to become None"""
+        self.__connection.deleted.disconnect(self.deleted)
+        self.__connection = None

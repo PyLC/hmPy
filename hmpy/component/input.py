@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QObject, QTimer, pyqtSignal
+from PyQt5.QtCore import QObject, QTimer, pyqtSignal, pyqtSlot
 
 
 class Input(QObject):
@@ -23,6 +23,7 @@ class Input(QObject):
         self.__address = address
         self.__connection = connection
         self.__value = None
+        self.__connection.deleted.connect(self.deleted)
         self.init_timer()
 
     def init_timer(self):
@@ -34,7 +35,10 @@ class Input(QObject):
 
     def read(self):
         """Read a value from the plc. Executed on timer timeout."""
-        value = self.__connection.read(self.__register_type, self.__address, 1)
+        if self.__connection is not None:
+            value = self.__connection.read(self.__register_type, self.__address, 1)
+        else:
+            value = None
 
         if not value is None:
             self.value = value
@@ -48,3 +52,10 @@ class Input(QObject):
         if value != self.__value:
             self.__value = value
             self.valueChanged.emit()
+
+    @pyqtSlot()
+    def deleted(self):
+        """When the connection (PLC) is deleted, this causes the connection to become None"""
+        self.__connection.deleted.disconnect(self.deleted)
+        self.__connection = None
+

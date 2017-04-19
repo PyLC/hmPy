@@ -1,6 +1,6 @@
 import importlib, inspect, sys
 from enum import Enum
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QObject, pyqtSignal
 
 
 def get_connection_types():
@@ -23,12 +23,18 @@ class RegisterTypes(Enum):
 
 class Connection(QObject):
 
+    connected_changed = pyqtSignal(bool)
+    deleted = pyqtSignal()
+
     Registers = RegisterTypes
 
     def __init__(self):
         super().__init__()
 
     def connect(self):
+        pass
+
+    def disconnect(self):#Overridding and overridden?
         pass
 
     def write(self, mem_type, address, value):

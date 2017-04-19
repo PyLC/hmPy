@@ -42,7 +42,10 @@ class ConnectionManager(QObject):
             raise ValueError("No connection exists with that name")
         self.__connections[name].connected_changed.disconnect()
         self.__connections[name].disconnect()
+        self.__connections[name].deleted.emit()
+
         del self.__connections[name]
+
         self.connections_changed.emit()
 
     def destroy_all(self):

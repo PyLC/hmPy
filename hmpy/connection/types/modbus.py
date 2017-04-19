@@ -1,12 +1,9 @@
 from pymodbus3.client.sync import ModbusTcpClient as ModbusClient
 from pymodbus3.exceptions import ModbusException
 from hmpy.connection import Connection
-from PyQt5.QtCore import pyqtSignal
 
 
 class ModbusConnection(Connection):
-
-    connected_changed = pyqtSignal(bool)
 
     def __init__(self, connection_ip, connection_port):
         """
