@@ -32,7 +32,8 @@ class Input(QObject):
         self.__timer = QTimer()
         self.__timer.setInterval(self.__interval)
         self.__timer.timeout.connect(self.read)
-        self.__timer.start(0)
+        self.__timer.start()
+        self.read()
 
     def read(self):
         """Read a value from the plc. Executed on timer timeout."""
