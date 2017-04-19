@@ -7,15 +7,13 @@ class Output(QObject):
     :attribute value: The value of the output.
     """
 
-    def __init__(self, register_type, address, connection):
+    def __init__(self, address, connection):
         """Initialize the Output.
 
-        :param register_type: PLC Register to write to.
         :param address: Address of the register to write to
         :param connection: Connection to the PLC.
         """
         super().__init__()
-        self.__register_type = register_type
         self.__address = address
         self.__connection = connection
         self.__connection.deleted.connect(self.deleted)
@@ -24,7 +22,7 @@ class Output(QObject):
     def write(self):
         """Write a value to a plc. Executed whenever the value attribute is changed."""
         if not self.value is None and self.__connection is not None:
-            self.__connection.write(self.__register_type, self.__address, self.value)
+            self.__connection.write(self.__address, self.value)
 
     @property
     def value(self):

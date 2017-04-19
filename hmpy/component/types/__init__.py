@@ -42,7 +42,7 @@ class AbstractComponent(QObject):
 
         if 'outputs' in config:
             for name, obj in config['outputs'].items():
-                self.outputs[name] = Output(obj['register_type'], obj['address'], obj['connection'])
+                self.outputs[name] = Output(obj['address'], obj['connection'])
 
 
 # Load all Component types in module path

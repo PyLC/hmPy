@@ -61,17 +61,16 @@ class ModbusConnection(Connection):
         self.__connected = value
         self.connected_changed.emit(value)
 
-    def write(self, mem_type, address, value):
+    def write(self, address, value):
         """
-        :param mem_type: Constant signifying the type of memory to be written
         :param address: Address or number of the area to be written
         :param value: Value to be written to the PLC
         :return: Void
         """
         if self.connected:
-            if mem_type == Connection.Registers.HOLDING_REGISTER:
+            if type(value) is int:
                 self.__client.write_register(address, value)
-            elif mem_type == Connection.Registers.COIL:
+            elif type(value) is bool:
                 self.__client.write_coil(address, value)
             else:
                 raise AttributeError

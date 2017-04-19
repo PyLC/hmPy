@@ -34,14 +34,14 @@ class TestModbusConnection(unittest.TestCase):
     @patch.object(ModbusClient, 'connect')
     def test_write_coil(self, mock_connect, mock_write):
         self.connection.connect()
-        self.connection.write(Connection.Registers.COIL, 1, True)
+        self.connection.write(1, True)
         mock_write.assert_called_once_with(1, True)
 
     @patch.object(ModbusClient, 'write_register')
     @patch.object(ModbusClient, 'connect')
     def test_write_holding_register(self, mock_connect, mock_write):
         self.connection.connect()
-        self.connection.write(Connection.Registers.HOLDING_REGISTER, 1, 10)
+        self.connection.write(1, 10)
         mock_write.assert_called_once_with(1, 10)
 
     @patch.object(ModbusClient, 'read_input_registers')

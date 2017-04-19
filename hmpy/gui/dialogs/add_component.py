@@ -94,14 +94,14 @@ class AddComponentDialog(QDialog):
         cls = self.component_types[self.cmb_component_type.currentText()]
 
         self.inputs = dict()
-        self.outputs= dict()
+        self.outputs = dict()
         if len(cls.input_names) != 0:
             self.add_row("Inputs")
         for name in cls.input_names:
             self.inputs[name] = {
                 "name": self.add_row("Name", QLineEdit()),
                 "interval": self.add_row("Interval", QLineEdit()),
-                "register_type":self.add_row("Register", QComboBox()),
+                "register_type": self.add_row("Register", QComboBox()),
                 "address": self.add_row("Address", QLineEdit()),
                 "connection": self.add_row("Connection", QComboBox())
             }
@@ -122,7 +122,6 @@ class AddComponentDialog(QDialog):
         for name in cls.output_names:
             self.outputs[name] = {
                 "name": self.add_row("Name", QLineEdit()),
-                "register_type": self.add_row("Register", QComboBox()),
                 "address": self.add_row("Address", QLineEdit()),
                 "connection": self.add_row("Connection", QComboBox())
             }
@@ -132,7 +131,6 @@ class AddComponentDialog(QDialog):
             a_validator = QIntValidator()
             a_validator.setBottom(0)
             self.outputs[name]['address'].setValidator(a_validator)
-            self.outputs[name]['register_type'].addItems(RegisterTypes.__members__.keys())
             self.outputs[name]['connection'].addItems(self.connections.keys())
 
     def add_component(self):
@@ -173,7 +171,6 @@ class AddComponentDialog(QDialog):
                 return self.input_error("The address field for output '%s' must not be empty" % key)
             config['outputs'][key] = dict()
             config['outputs'][key]['address'] = int(obj["address"].text().strip())
-            config['outputs'][key]['register_type'] = RegisterTypes[obj["register_type"].currentText()]
             config['outputs'][key]['connection'] = self.gui.connection_manager.get_connection(obj["connection"].currentText())
 
         self.gui.component_manager.add(name, component_type, config)

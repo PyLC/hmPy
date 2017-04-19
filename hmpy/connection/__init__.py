@@ -37,7 +37,7 @@ class Connection(QObject):
     def disconnect(self):#Overridding and overridden?
         pass
 
-    def write(self, mem_type, address, value):
+    def write(self, address, value):
         pass
 
     def read(self, mem_type, address, count):

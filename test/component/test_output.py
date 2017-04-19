@@ -16,13 +16,11 @@ class TestOutput(unittest.TestCase):
 
     def test_write(self):
         """Test that changing the output value triggers a write on the connection with the appropriate values"""
-        register = Connection.Registers.COIL
         address = 0
         value = 1
-        self.output = Output(register, address, self.connection)
-        self.output.value = value;
+        self.output = Output(address, self.connection)
+        self.output.value = value
         self.assertEquals(self.connection.value, 1)
-        self.assertEquals(self.connection.register, register)
         self.assertEquals(self.connection.address, address)
 
     # TODO tests - invalid connection, invalid register types, addresses?
@@ -37,10 +35,8 @@ class TestConnection(Connection):
         self.connected = True
         self.value = None
         self.address = None
-        self.register = None
 
-    def write(self, register_type, address, value):
+    def write(self, address, value):
         """Simple read implementation, returns own value attribute."""
         self.value = value
         self.address = address
-        self.register = register_type
