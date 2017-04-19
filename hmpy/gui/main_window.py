@@ -14,14 +14,17 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.connection_manager = ConnectionManager()
         self.component_manager = ComponentManager()
+        self.dashboard = ComponentDashboard(self)
         self.init_ui()
 
     def init_ui(self):
         """Initialize the MainWindow widget ui."""
         self.setWindowTitle("hmPy")
         self.init_menu()
-        self.setCentralWidget(ComponentDashboard(self))
+        self.setCentralWidget(self.dashboard)
+        self.setMinimumSize(self.dashboard.MIN_COMPONENT_SIZE, self.dashboard.MIN_COMPONENT_SIZE)
         self.showMaximized()
+
 
     def init_menu(self):
         """Initialize and populate the QMenuBar."""
