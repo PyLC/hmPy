@@ -1,0 +1,6 @@
+PyQt5===5.9
+pytest==3.2.2
+pytest-cov==2.5.1
+pytest-pep8==1.0.6
+tox==2.8.2
+Sphinx==1.5.3
