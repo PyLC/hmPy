@@ -7,11 +7,6 @@ class InterfaceLayout(QLayout):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-
-        if parent is not None:
-            self.setContentsMargins(0)
-        self.setSpacing(-1)
-
         self._items = []
 
     def __del__(self):
@@ -26,6 +21,7 @@ class InterfaceLayout(QLayout):
 
     def setGeometry(self, rect):
         super().setGeometry(rect)
+        rect = self.contentsRect()
         x = rect.x()
         y = rect.y()
         line_height = 0
