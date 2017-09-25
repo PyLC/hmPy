@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget
+from PyQt5.QtWidgets import QApplication
+from .window import InterfaceWindow
 
 
 class Interface:
@@ -26,20 +27,3 @@ class Interface:
 
         :param view: The view to be added to the Interface"""
         self._root.add_view(view)
-
-
-class InterfaceWindow(QWidget):
-    """The main window QWidget of the Interface"""
-
-    def __init__(self):
-        """Initialize the InterfaceWindow"""
-        super().__init__()
-        self._grid = QGridLayout()
-        self.setLayout(self._grid)
-
-    def add_view(self, view):
-        """Add a view to the Interface window
-
-        :param view: The view to be added to the Interface
-        """
-        raise NotImplementedError("add_view not implemented")
