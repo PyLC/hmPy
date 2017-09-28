@@ -29,10 +29,14 @@ class InterfaceLayout(QLayout):
         for item in self._items:
             wid = item.widget()
 
-            spacing_x = self.spacing() + \
-                wid.style().layoutSpacing(QSizePolicy.PushButton, QSizePolicy.PushButton, Qt.Horizontal)
-            spacing_y = self.spacing() + \
-                wid.style().layoutSpacing(QSizePolicy.PushButton, QSizePolicy.PushButton, Qt.Vertical)
+            spacing_x = self.spacing() + wid.style().layoutSpacing(
+                QSizePolicy.PushButton,
+                QSizePolicy.PushButton,
+                Qt.Horizontal)
+            spacing_y = self.spacing() + wid.style().layoutSpacing(
+                QSizePolicy.PushButton,
+                QSizePolicy.PushButton,
+                Qt.Vertical)
 
             x_next = x + item.sizeHint().width() + spacing_x
 

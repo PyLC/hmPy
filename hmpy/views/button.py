@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QPushButton
 
 
 class ButtonView(View):
-    """The Button view creates a simple, clickable button for triggering actions."""
+    """The Button view creates a clickable button for triggering actions."""
 
     def __init__(self, text):
         """Initialize the button view.
