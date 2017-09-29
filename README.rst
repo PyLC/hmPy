@@ -1,7 +1,7 @@
 hmPy
 ====
 
-|docs|
+|travis| |docs|
 
 Purpose
 -------
@@ -15,3 +15,6 @@ Full documentation and tutorial available at `Read the Docs`_.
 
 .. |docs| image:: https://readthedocs.org/projects/pylc-hmpy/badge/?version=latest
     :target: https://pylc-hmpy.readthedocs.io/en/latest/?badge=latest
+
+.. |travis| image:: https://travis-ci.org/PyLC/hmPy.svg?branch=master
+    :target: https://travis-ci.org/PyLC/hmPy
