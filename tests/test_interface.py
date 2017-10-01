@@ -2,8 +2,14 @@ import pytest
 from hmpy import Interface
 
 
-def test_multiple_instances():
+@pytest.fixture(scope="module")
+def interface():
+    intf = Interface()
+    yield intf
+    intf = None
+
+
+def test_multiple_instances(interface):
     """Test trying to create multiple instances of class Interface"""
-    int1 = Interface()
     with pytest.raises(Exception):
         int2 = Interface()
