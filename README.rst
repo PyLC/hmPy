@@ -1,7 +1,7 @@
 hmPy
 ====
 
-|travis| |docs|
+|travis| |docs| |pypi|
 
 Purpose
 -------
@@ -18,3 +18,6 @@ Full documentation and tutorial available at `Read the Docs`_.
 
 .. |travis| image:: https://travis-ci.org/PyLC/hmPy.svg?branch=master
     :target: https://travis-ci.org/PyLC/hmPy
+
+.. |pypi| image:: https://badge.fury.io/py/hmPy.svg
+    :target: https://pypi.python.org/pypi/hmPy/
