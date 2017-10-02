@@ -5,10 +5,19 @@ hmPy
 
 Purpose
 -------
+
 hmPy is a Python library for building HMIs.
+
+Installing hmPy
+---------------
+
+To install the latest version of hmPy using pip::
+
+    $ pip install hmPy
 
 Documentation
 -------------
+
 Full documentation and tutorial available at `Read the Docs`_.
 
 .. _Read The Docs: https://pylc-hmpy.readthedocs.io
