@@ -1,14 +1,23 @@
 hmPy
 ====
 
-|travis| |docs|
+|travis| |docs| |pypi|
 
 Purpose
 -------
+
 hmPy is a Python library for building HMIs.
+
+Installing hmPy
+---------------
+
+To install the latest version of hmPy using pip::
+
+    $ pip install hmPy
 
 Documentation
 -------------
+
 Full documentation and tutorial available at `Read the Docs`_.
 
 .. _Read The Docs: https://pylc-hmpy.readthedocs.io
@@ -18,3 +27,6 @@ Full documentation and tutorial available at `Read the Docs`_.
 
 .. |travis| image:: https://travis-ci.org/PyLC/hmPy.svg?branch=master
     :target: https://travis-ci.org/PyLC/hmPy
+
+.. |pypi| image:: https://badge.fury.io/py/hmPy.svg
+    :target: https://pypi.python.org/pypi/hmPy/
