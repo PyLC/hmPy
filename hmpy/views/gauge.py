@@ -16,8 +16,8 @@ class GaugeView(View):
 
         :param starting_value: starting value for the gauge.
         :param min_value: The minimum value of the gauge.
-        :param max_value: The minimum value of the gauge.
-        :param precision: The minimum value of the gauge.
+        :param max_value: The maximum value of the gauge.
+        :param precision: The precision for the text of the value.
         :param unit_text: The text displaying the unit of the gauge
         :param color: The background colour of the gauge
         """
