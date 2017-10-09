@@ -52,3 +52,11 @@ def test_digit_count_negative(digits):
     # Test that the digit count accounts for the - in negative values
     view = LCDView(-generate_int(digits))
     assert view.lcd.digitCount() == digits + 1
+
+"""
+
+
+
+
+
+"""
