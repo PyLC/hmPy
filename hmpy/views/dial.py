@@ -25,7 +25,7 @@ class DialView(View):
         self.dial.setNotchesVisible(notches_visible)
         self.dial.setNotchesVisible(True)
 
-    def set_on_value_changed(self, callback):
+    def on_value_changed(self, callback):
         self.dial.valueChanged.connect(callback)
 
     @property
