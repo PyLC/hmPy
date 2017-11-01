@@ -15,6 +15,14 @@ To install the latest version of hmPy using pip::
 
     $ pip install hmPy
 
+Running Tests
+-------------
+hmPy's test suite can be run using ``tox``::
+
+    $ tox
+
+Note that pep8 compliance is required for the tests to pass.
+
 Example Code
 ------------
 For those of you who want to hit the ground running::
