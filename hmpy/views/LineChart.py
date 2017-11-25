@@ -30,7 +30,18 @@ class LineChart(View):
             self.view.resize(size)
 
 """The Line class represents a single line within the LineChart"""
+
+
 class Line:
+
+    """Below are some basic colours for a line, extracted so that no QT components need to be called outside our API,"""
+    white = Qt.white
+    black = Qt.black
+    red = Qt.red
+    green = Qt.green
+    blue = Qt.blue
+    yellow = Qt.yellow
+
     def __init__(self, colour=None, width=0.1):
         self._line = QLineSeries()
         self.pen = self._line.pen()
@@ -57,6 +68,8 @@ class Line:
                 raise Exception("X and Y data lists do not have equal amount of elements")
         else:
             self._line.append(x_data, y_data)
+        if self._line.count() > 100:
+            self._line.removePoints(0, self._line.count() - 100)
         self.y_axis.setRange(self._get_y_limits()[0], self._get_y_limits()[1])
         self.x_axis.setRange(self._get_x_limits()[0], self._get_x_limits()[1])
     """
