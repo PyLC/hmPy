@@ -86,7 +86,7 @@ class Line:
         list_of_y_points = []
         point_list = self._line.pointsVector()
         for i in point_list:
-            # there needs to be a better way to do this
+            # TODO: there needs to be a better way to do this
             list_of_y_points.append(i.y())
         return min(list_of_y_points), max(list_of_y_points)
     """
@@ -97,5 +97,6 @@ class Line:
         list_of_x_points = []
         point_list = self._line.pointsVector()
         for i in point_list:
+            # TODO: Better way to do this
             list_of_x_points.append(i.x())
         return min(list_of_x_points), max(list_of_x_points)
