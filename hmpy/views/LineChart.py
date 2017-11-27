@@ -34,7 +34,7 @@ class LineChart(View):
 
 class Line:
 
-    """Below are some basic colours for a line, extracted so that no QT components need to be called outside our API,"""
+    """Below are some basic colours for a line, extracted so that no QT components need to be called outside our API"""
     white = Qt.white
     black = Qt.black
     red = Qt.red
@@ -53,7 +53,7 @@ class Line:
             self._gradient.setColorAt(0.0, colour)
             self._gradient.setColorAt(1.0, colour)
             self._gradient.setCoordinateMode(QLinearGradient.ObjectBoundingMode)
-        self.pen.setWidth(width)
+        self.pen.setWidthF(width)
         self._line_actual.setPen(self.pen)
         self._area_series.setBrush(self._gradient)
         self.y_axis = QValueAxis()
@@ -79,7 +79,7 @@ class Line:
             self._line_area.append(x_data, 0)
         if self._line_actual.count() > 100:
             self._line_actual.removePoints(0, self._line_actual.count() - 100)
-            self._line_area.removePoints(0, self._line_actual.count() - 100)
+            self._line_area.removePoints(0, self._line_area.count() - 100)
         self.y_axis.setRange(self._get_y_limits()[0], self._get_y_limits()[1])
         self.x_axis.setRange(self._get_x_limits()[0], self._get_x_limits()[1])
 
