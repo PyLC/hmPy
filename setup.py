@@ -15,7 +15,7 @@ setup(
     license="GPL v3",
     packages=find_packages(exclude=["test"]),
     install_requires=[
-        'PyQt5===5.9'
+        'PyQt5===5.9',
         'PyQtChart===5.9'
     ]
 )
