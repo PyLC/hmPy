@@ -55,9 +55,9 @@ class GaugeView(View):
 
         :param to: Boolean value.
         """
-        if value < self.__min_value:
+        if value <= self.__min_value:
             self._needle_value = self.MIN_NEEDLE_VALUE
-        elif value > self.__max_value:
+        elif value >= self.__max_value:
             self._needle_value = self.MAX_NEEDLE_VALUE
         else:
             self._calculate_needle_angle()
