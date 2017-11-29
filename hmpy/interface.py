@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QTimer
-
-from .window import InterfaceWindow
+from hmpy.util.timer import Timer
+from hmpy.window import InterfaceWindow
 
 
 class Interface:
@@ -30,23 +29,20 @@ class Interface:
 
         :param delay: Time to wait (in milliseconds)
         :param action: The function to execute"""
-        timer = QTimer()
-        timer.timeout.connect(action)
-        timer.setInterval(delay)
-        timer.setSingleShot(True)
+        timer = Timer(delay, action, False)
         timer.start()
         self._timers.append(timer)
+        return timer
 
     def every(self, interval, action):
         """Schedule an action to be executed at a set interval.
 
         :param interval: The execution interval (in milliseconds)
         :param action: The function to execute"""
-        timer = QTimer()
-        timer.timeout.connect(action)
-        timer.setInterval(interval)
+        timer = Timer(interval, action)
         timer.start()
         self._timers.append(timer)
+        return timer
 
     def add_view(self, view):
         """Add a view to the Interface
