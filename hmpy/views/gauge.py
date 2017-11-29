@@ -80,6 +80,7 @@ class GaugeView(View):
         """
         self.__min_value = min_value
         self._calculate_needle_angle()
+        self._create_point_text()
         self.repaint()
 
     @property
@@ -98,6 +99,8 @@ class GaugeView(View):
         """
         self.__max_value = max_value
         self._calculate_needle_angle()
+        self._create_point_text()
+
         self.repaint()
 
     def paintEvent(self, event):
@@ -165,24 +168,16 @@ class GaugeView(View):
         paint.end()
 
     def _create_point_text(self):
-        """
-        Create the text that goes along the markings
-        :return:
-        """
         add = (self.__max_value - self.__min_value) / (275.0 / self.SCALE)
         value = self.__min_value
+
+        self._pointText = []
 
         for i in range(0, 12):
             self._pointText.append(("%%.%df" % self._precision) % value)
             value += add
 
     def _draw_value_text(self, paint):
-        """
-        Draw the current value and the unit text
-
-        :param paint:
-        :return:
-        """
         paint.save()
 
         paint.translate(self.width() / 2, self.height() / 2)
@@ -204,13 +199,6 @@ class GaugeView(View):
         paint.restore()
 
     def _draw_markings(self, paint, radius):
-        """
-        Draw the markings and text
-
-        :param paint:
-        :param radius:
-        :return:
-        """
         paint.save()
 
         paint.translate(self.width() / 2, self.height() / 2)
@@ -228,7 +216,7 @@ class GaugeView(View):
         paint.rotate(i)
 
         while i <= self.MAX_NEEDLE_VALUE:
-            if (i + self.MAX_NEEDLE_VALUE + 5) % self.SCALE == 0:
+            if (i + self.MAX_NEEDLE_VALUE+5) % self.SCALE == 0:
                 paint.drawLine(2, -smallest, 2, -(smallest - 10))
                 paint.save()
 
@@ -266,14 +254,8 @@ class GaugeView(View):
         paint.restore()
 
     def _draw_needle(self, paint):
-        """
-        Draw a needle onto the gauge
-
-        :param paint:
-        :return:
-        """
         paint.save()
-        paint.translate(self.width() / 2, self.height() / 2)
+        paint.translate(self.width()/2, self.height()/2)
 
         scale = min(self.width() / 120.0, self.height() / 120.0)
 
