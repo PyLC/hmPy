@@ -1,7 +1,7 @@
 from hmpy.views.view import View
-from PyQt5.QtGui import QPainter, QBrush, QPen, QColor, QImage, QConicalGradient, QPalette, QPixmap, QPolygon, QFont, QFontMetrics
+from PyQt5.QtGui import QPainter, QBrush, QPen, QColor, QImage, \
+    QConicalGradient, QPalette, QPixmap, QPolygon, QFont, QFontMetrics
 from PyQt5.QtCore import Qt, QRect, QPoint, QPointF
-from enum import Enum
 import math
 
 
@@ -9,6 +9,9 @@ class GaugeView(View):
     """
     View simulating a Gauge.
     """
+    MIN_NEEDLE_VALUE = -135
+    MAX_NEEDLE_VALUE = 135
+    SCALE = 25.0
 
     def __init__(self, value=0, min_value=0, max_value=100, precision=2,
                  unit_text="", color=QColor(Qt.white)):
@@ -26,6 +29,7 @@ class GaugeView(View):
         self._color = color
         self._unit_text = unit_text
         self.__value = value
+        self._needle_value = value
 
         self.__min_value = min_value
         self.__max_value = max_value
@@ -36,7 +40,6 @@ class GaugeView(View):
         self._create_point_text()
         self._needle_angle = -135
         self._calculate_needle_angle()
-
 
     @property
     def value(self):
@@ -53,13 +56,12 @@ class GaugeView(View):
         :param to: Boolean value.
         """
         if value < self.__min_value:
-            self.__value = self.__min_value
+            self._needle_value = self.MIN_NEEDLE_VALUE
         elif value > self.__max_value:
-            self.__value = self.__max_value
+            self._needle_value = self.MAX_NEEDLE_VALUE
         else:
-            self.__value = value
-
-        self._calculate_needle_angle()
+            self._calculate_needle_angle()
+        self.__value = value
         self.repaint()
 
     @property
@@ -77,7 +79,6 @@ class GaugeView(View):
         :param to: Boolean value.
         """
         self.__min_value = min_value
-
         self._calculate_needle_angle()
         self.repaint()
 
@@ -96,7 +97,6 @@ class GaugeView(View):
         :param to: Boolean value.
         """
         self.__max_value = max_value
-
         self._calculate_needle_angle()
         self.repaint()
 
@@ -106,15 +106,14 @@ class GaugeView(View):
         :param event: The paint event.
         """
         paint = QPainter()
-        
         rect = event.rect()
 
         # Get drawing size and center
         gauge_rect = QRect(rect)
         size = gauge_rect.size()
         center = gauge_rect.center()
-
-        smallest = size.width() if size.width() < size.height() else size.height()
+        smallest = size.width() \
+            if size.width() < size.height() else size.height()
 
         # Set the border gradient
         border_gradient = QConicalGradient(center, -90)
@@ -136,25 +135,28 @@ class GaugeView(View):
         paint.setRenderHint(QPainter.Antialiasing)
 
         paint.save()
-        paint.setPen(QPen(QBrush(border_gradient), smallest / 18.0))
-        
-        paint.drawEllipse(center, (smallest - pen_width) / 2, (smallest - pen_width) / 2)
+        paint.setPen(QPen(QBrush(border_gradient),
+                          smallest / 18.0))
+        paint.drawEllipse(center, (smallest - pen_width) / 2,
+                          (smallest - pen_width) / 2)
 
         border_color = self.palette().color(QPalette.Dark)
         border_gradient.setColorAt(0.2, border_color)
         border_gradient.setColorAt(0.5, self.palette().color(QPalette.Shadow))
         border_gradient.setColorAt(0.8, border_color)
 
-        paint.setPen(QPen(QBrush(border_gradient), smallest / 25.0))
-        paint.drawEllipse(center, ((smallest - pen_width) / 2) - smallest / 25.0, ((smallest - pen_width) / 2) - smallest / 25.0)
+        paint.setPen(QPen(QBrush(border_gradient), smallest / self.SCALE))
+        paint.drawEllipse(center, ((smallest - pen_width) / 2) -
+                          smallest / self.SCALE,
+                          ((smallest - pen_width) / 2) - smallest / self.SCALE)
 
         paint.restore()
-
-        self._draw_arc(paint, ((smallest - pen_width) / 2) - smallest / 15)
+        self._draw_arc(paint,
+                       ((smallest - pen_width) / 2) - smallest / 15)
         self._draw_needle(paint)
-        self._draw_markings(paint, ((smallest - pen_width) / 2) - smallest / 15)
+        self._draw_markings(paint,
+                            ((smallest - pen_width) / 2) - smallest / 15)
         self._draw_value_text(paint)
-        
         paint.end()
 
         # Draw image to widget
@@ -162,9 +164,12 @@ class GaugeView(View):
         paint.drawPixmap(1, 1, QPixmap.fromImage(image))
         paint.end()
 
-
     def _create_point_text(self):
-        add = (self.__max_value - self.__min_value) / (275.0 / 25)
+        """
+        Create the text that goes along the markings
+        :return:
+        """
+        add = (self.__max_value - self.__min_value) / (275.0 / self.SCALE)
         value = self.__min_value
 
         for i in range(0, 12):
@@ -172,11 +177,18 @@ class GaugeView(View):
             value += add
 
     def _draw_value_text(self, paint):
+        """
+        Draw the current value and the unit text
+
+        :param paint:
+        :return:
+        """
         paint.save()
 
         paint.translate(self.width() / 2, self.height() / 2)
 
-        smallest = self.width() / 2.5 if self.width() < self.height() else self.height() / 2.5
+        smallest = self.width() / 2.5 \
+            if self.width() < self.height() else self.height() / 2.5
 
         font = QFont(self.font())
         font.setPixelSize(smallest / 8)
@@ -186,16 +198,25 @@ class GaugeView(View):
 
         font_metric = QFontMetrics(font)
         paint.drawText(0 - font_metric.width(text) / 2, smallest / 2, text)
-        paint.drawText(0 - font_metric.width(self._unit_text) / 2, smallest / 2 + 20, self._unit_text)
+        paint.drawText(0 - font_metric.width(self._unit_text) / 2,
+                       smallest / 2 + 20, self._unit_text)
 
         paint.restore()
 
     def _draw_markings(self, paint, radius):
+        """
+        Draw the markings and text
+
+        :param paint:
+        :param radius:
+        :return:
+        """
         paint.save()
 
         paint.translate(self.width() / 2, self.height() / 2)
 
-        smallest = self.width() / 2.5 if self.width() < self.height() else self.height() / 2.5
+        smallest = self.width() / 2.5 \
+            if self.width() < self.height() else self.height() / 2.5
 
         font = QFont(self.font())
         font.setPixelSize(smallest / 10)
@@ -206,15 +227,16 @@ class GaugeView(View):
 
         paint.rotate(i)
 
-        while i <= 135:
-            if (i + 140) % 25 == 0:
+        while i <= self.MAX_NEEDLE_VALUE:
+            if (i + self.MAX_NEEDLE_VALUE + 5) % self.SCALE == 0:
                 paint.drawLine(2, -smallest, 2, -(smallest - 10))
                 paint.save()
 
                 paint.resetTransform()
                 paint.translate(self.width() / 2, self.height() / 2)
 
-                x = ((radius * 0.75) * math.cos((i - 90) * math.pi / 180.0)) - (smallest / 8)
+                x = ((radius * 0.75) * math.cos((i - 90) * math.pi / 180.0))\
+                    - (smallest / 8)
                 y = ((radius * 0.75) * math.sin((i - 90) * math.pi / 180.0))
 
                 paint.drawText(x, y, self._pointText[counter])
@@ -230,19 +252,28 @@ class GaugeView(View):
 
     def _draw_arc(self, paint, radius):
         paint.save()
-        paint.translate(self.width() / 2 - radius / 2, self.height() / 2 - radius / 2)
+        paint.translate(self.width() / 2 - radius / 2,
+                        self.height() / 2 - radius / 2)
 
         grad = QConicalGradient(QPointF(radius / 2, radius / 2), 270.0)
         grad.setColorAt(.75, Qt.green)
         grad.setColorAt(.5, Qt.yellow)
         grad.setColorAt(.25, Qt.red)
         paint.setPen(QPen(QBrush(grad), radius / 18.0))
-        paint.drawArc(QRect(-radius / 2 - 1.4, -radius / 2, radius * 2, radius * 2), 228 * 15.9, -((self._needle_angle + 135) * 16.1))
+        paint.drawArc(QRect(-radius / 2 - 1.4, -radius / 2,
+                            radius * 2, radius * 2), 228 * 15.9,
+                      -((self._needle_angle + 135) * 16.1))
         paint.restore()
 
     def _draw_needle(self, paint):
+        """
+        Draw a needle onto the gauge
+
+        :param paint:
+        :return:
+        """
         paint.save()
-        paint.translate(self.width()/2, self.height()/2)
+        paint.translate(self.width() / 2, self.height() / 2)
 
         scale = min(self.width() / 120.0, self.height() / 120.0)
 
@@ -251,7 +282,8 @@ class GaugeView(View):
         paint.setPen(QColor(255, 33, 33))
         paint.setBrush(Qt.red)
 
-        needle = QPolygon([QPoint(-1, -32), QPoint(-3, 10), QPoint(3, 10), QPoint(1, -32)])
+        needle = QPolygon([QPoint(-1, -32), QPoint(-3, 10),
+                           QPoint(3, 10), QPoint(1, -32)])
         paint.rotate(self._needle_angle)
 
         paint.drawPolygon(needle)
@@ -283,7 +315,7 @@ class GaugeView(View):
         """
         calculates the needle angle
         """
-        self._needle_angle = ((270.0 * ((self.__value - self.__min_value) / (self.__max_value - self.__min_value))) - 135.0)
-
-
-
+        needle_range = self.__max_value - self.__min_value
+        needle_position = self._needle_value - self.__min_value
+        self._needle_angle = ((270.0 * (needle_position / needle_range)) -
+                              135.0)
