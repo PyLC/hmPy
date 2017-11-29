@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import QDial
 
 class DialView(View):
 
-    def __init__(self, value=None, min_value=0, max_value=100, notches_visible=True):
+    def __init__(self, value=None, min_value=0, max_value=100,
+                 notches_visible=True):
         """Initialize the DialView QWidget
 
         :param value: value of the dial.
