@@ -52,6 +52,9 @@ class SwitchView(View):
         self.repaint()
 
     def toggle(self):
+        """
+        Toggle the state of the switch
+        """
         self._state = not self._state
         if self._on_toggle is not None:
             self._on_toggle()
