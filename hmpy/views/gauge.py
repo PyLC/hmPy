@@ -301,4 +301,5 @@ class GaugeView(View):
         """
         needle_range = self.__max_value - self.__min_value
         needle_position = self._needle_value - self.__min_value
-        self._needle_angle = ((270.0 * (needle_position / needle_range)) - 135.0)
+        self._needle_angle = ((270.0 * (needle_position / needle_range)) - 
+                              135.0)
