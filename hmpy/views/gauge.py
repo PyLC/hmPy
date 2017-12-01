@@ -17,7 +17,7 @@ class GaugeView(View):
                  unit_text="", color=QColor(Qt.white)):
         """Initialize the view
 
-        :param starting_value: starting value for the gauge.
+        :param value: starting value for the gauge.
         :param min_value: The minimum value of the gauge.
         :param max_value: The maximum value of the gauge.
         :param precision: The precision for the text of the value.
@@ -53,7 +53,7 @@ class GaugeView(View):
     def value(self, value):
         """Set 'value' class attribute, trigger repaint.
 
-        :param to: Boolean value.
+        :param value: New value.
         """
         if value < self.__min_value:
             self._needle_value = self.__min_value
@@ -78,7 +78,7 @@ class GaugeView(View):
     def min_value(self, min_value):
         """Set 'min_value' class attribute, trigger repaint.
 
-        :param to: Boolean value.
+        :param min_value: New min value value.
         """
         self.__min_value = min_value
         self._calculate_needle_angle()
@@ -97,7 +97,7 @@ class GaugeView(View):
     def max_value(self, max_value):
         """Set 'max_value' class attribute, trigger repaint.
 
-        :param to: Boolean value.
+        :param max_value: New max value.
         """
         self.__max_value = max_value
         self._calculate_needle_angle()
@@ -218,7 +218,7 @@ class GaugeView(View):
         paint.rotate(i)
 
         while i <= self.MAX_NEEDLE_VALUE:
-            if (i + self.MAX_NEEDLE_VALUE+5) % self.SCALE == 0:
+            if (i + self.MAX_NEEDLE_VALUE + 5) % self.SCALE == 0:
                 paint.drawLine(2, -smallest, 2, -(smallest - 10))
                 paint.save()
 
@@ -257,7 +257,7 @@ class GaugeView(View):
 
     def _draw_needle(self, paint):
         paint.save()
-        paint.translate(self.width()/2, self.height()/2)
+        paint.translate(self.width() / 2, self.height() / 2)
 
         scale = min(self.width() / 120.0, self.height() / 120.0)
 
@@ -301,5 +301,4 @@ class GaugeView(View):
         """
         needle_range = self.__max_value - self.__min_value
         needle_position = self._needle_value - self.__min_value
-        self._needle_angle = ((270.0 * (needle_position / needle_range)) - 
-                              135.0)
+        self._needle_angle = ((270.0 * (needle_position / needle_range)) - 135.0)
