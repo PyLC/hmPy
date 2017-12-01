@@ -1,4 +1,4 @@
-from hmpy.views.LineChart import Line, LineChart
+from hmpy.views.chart import Line, LineChart
 from PyQt5.QtCore import Qt
 from PyQt5.Qt import QColor
 import pytest
