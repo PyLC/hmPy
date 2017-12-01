@@ -7,8 +7,8 @@ __author__ = "Kody Emm"
 
 
 class LineChart(View):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self):
+        super().__init__()
         self.chart = QChart()
         self.view = QChartView(self.chart)
         self.view.setRenderHint(QPainter.Antialiasing)
@@ -60,6 +60,7 @@ class Line:
         self.x_axis = QValueAxis()
         self.y_axis.alignment = Qt.AlignLeft
         self.x_axis.alignment = Qt.AlignRight
+
     """
     Currently when data is added to line the line also changes the range of the axes in that chart in order to properly
     display the data
