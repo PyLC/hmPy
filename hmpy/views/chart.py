@@ -44,8 +44,9 @@ class Line:
 
     def __init__(self, colour=None, width=0.1):
         self._line_actual = QLineSeries()
-        self._line_area = QLineSeries()
-        self._area_series = QAreaSeries(self._line_actual, self._line_area)
+        #self._line_area = QLineSeries()
+        self._area_series = QAreaSeries(self._line_actual #, self._line_area
+        )
         self.pen = self._area_series.pen()
         self._gradient = QLinearGradient(QPointF(0, 0), QPointF(0, 1))
         if colour is not None:
@@ -72,15 +73,15 @@ class Line:
             if len(x_data) == len(y_data):
                 for i in range(len(x_data)):
                     self._line_actual.append(x_data[i], y_data[i])
-                    self._line_area.append(x_data[i], 0)  # keep a second line at the X-axis
+                    #self._line_area.append(x_data[i], 0)  # keep a second line at the X-axis
             else:
                 raise Exception("X and Y data lists do not have equal amount of elements")
         else:
             self._line_actual.append(x_data, y_data)
-            self._line_area.append(x_data, 0)
+            #self._line_area.append(x_data, 0)
         if self._line_actual.count() > 100:
             self._line_actual.removePoints(0, self._line_actual.count() - 100)
-            self._line_area.removePoints(0, self._line_area.count() - 100)
+            #self._line_area.removePoints(0, self._line_area.count() - 100)
         self.y_axis.setRange(self._get_y_limits()[0], self._get_y_limits()[1])
         self.x_axis.setRange(self._get_x_limits()[0], self._get_x_limits()[1])
 
