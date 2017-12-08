@@ -7,3 +7,4 @@ from hmpy.views.led import LEDView
 from hmpy.views.view import View
 
 __all__ = ["ButtonView", "DialView", "GaugeView", "LCDView", "LEDView", "View"]
+
