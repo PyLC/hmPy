@@ -14,6 +14,9 @@ class DialView(View):
         :param notches_visible: show/hide notches"""
         super().__init__()
 
+        if min_value > max_value:
+            raise ValueError
+
         self.dial = QDial(self)
         self.dial.setMinimum(min_value)
         self.dial.setMaximum(max_value)
@@ -46,6 +49,8 @@ class DialView(View):
 
     @min_value.setter
     def min_value(self, value):
+        if value > self.max_value:
+            raise ValueError
         self.dial.setMinimum(value)
 
     @property
@@ -54,4 +59,6 @@ class DialView(View):
 
     @max_value.setter
     def max_value(self, value):
+        if value < self.min_value:
+            raise ValueError
         self.dial.setMaximum(value)
