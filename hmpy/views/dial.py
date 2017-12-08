@@ -27,7 +27,10 @@ class DialView(View):
         self.dial.setNotchesVisible(True)
 
     def on_value_changed(self, callback):
-        self.dial.valueChanged.connect(callback)
+        if callable(callback):
+            self.dial.valueChanged.connect(callback)
+        else:
+            raise TypeError("Callback must be a callable function")
 
     @property
     def value(self):
