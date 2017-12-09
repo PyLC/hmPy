@@ -1,12 +1,17 @@
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QIcon
 from hmpy.util.timer import Timer
 from hmpy.window import InterfaceWindow
+import os
+
+
+ICON_PATH = os.path.dirname(os.path.realpath(__file__)) + os.sep + 'res' + os.sep + 'icon.png'
 
 
 class Interface:
     """The base Interface"""
 
-    def __init__(self):
+    def __init__(self, title='hmPy'):
         """Initialize the Interface
 
         :raise Exception: When another Interface already exists"""
@@ -16,7 +21,9 @@ class Interface:
 
         self._app = QApplication([])
         self._app.setStyle('Fusion')
+        self._app.setWindowIcon(QIcon(ICON_PATH))
         self._root = InterfaceWindow()
+        self._root.setWindowTitle(title)
         self._timers = []
 
     def start(self):
@@ -49,6 +56,12 @@ class Interface:
 
         :param view: The view to be added to the Interface"""
         self._root.add_view(view)
+
+    def set_title(self, title):
+        """ Set the InterfaceWindow title
+
+        :param title: The new window title"""
+        self._root.setWindowTitle(title)
 
     def quit(self):
         """Close the Interface"""
