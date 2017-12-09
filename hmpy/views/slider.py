@@ -62,7 +62,5 @@ class SliderView(View):
     def set_vertical_orientation(self):
         self.slider.setOrientation(Qt.Vertical)
 
-
-
-
-
+    def on_change(self, callback):
+        self.slider.valueChanged.connect(callback)
