@@ -75,35 +75,30 @@ class LineChart(View):
         if self._line.count() > 100:
             self._line.removePoints(0, self._line.count() - 100)
             self._area_line.removePoints(0, self._area_line.count() - 100)
-        self._y_axis.setRange(self._get_y_limits()[0], self._get_y_limits()[1])
-        self._x_axis.setRange(self._get_x_limits()[0], self._get_x_limits()[1])
+        limits = self._get_limits()
+        self._y_axis.setRange(limits[0], limits[1])
+        self._x_axis.setRange(limits[2], limits[3])
 
-    def _get_y_limits(self):
+    def _get_limits(self):
         """
-            :returns tuple, first element being the minimum Y value in the series, second element is the max Y value in
-            the series
+            :returns tuple
+            [0] = min_y
+            [1] = max_y
+            [2] = min_x
+            [3] = max_x
         """
         point_list = self._line.pointsVector()
-        minimum = point_list[0].y()
-        maximum = point_list[0].y()
+        minimum_y = point_list[0].y()
+        maximum_y = point_list[0].y()
+        minimum_x = point_list[0].x()
+        maximum_x = point_list[0].x()
         for i in point_list:
-            if i.y() < minimum:
-                minimum = i.y()
-            elif i.y() > maximum:
-                maximum = i.y()
-        return minimum, maximum
-
-    def _get_x_limits(self):
-        """
-            :returns tuple, first element being the minimum X value in the series, second element is the max X value in
-            the series
-        """
-        point_list = self._line.pointsVector()
-        minimum = point_list[0].x()
-        maximum = point_list[0].x()
-        for i in point_list:
-            if i.x() < minimum:
-                minimum = i.x()
-            elif i.x() > maximum:
-                maximum = i.x()
-        return minimum, maximum
+            if i.y() < minimum_y:
+                minimum_y = i.y()
+            elif i.y() > maximum_y:
+                maximum_y = i.y()
+            if i.x() < minimum_x:
+                minimum_x = i.x()
+            elif i.x() > maximum_x:
+                maximum_x = i.x()
+        return minimum_y, maximum_y, minimum_x, minimum_y
