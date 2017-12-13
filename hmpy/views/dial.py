@@ -24,7 +24,6 @@ class DialView(View):
         self.dial.setValue(value)
         self.dial.setNotchTarget(self.width() / 130.0)
         self.dial.setNotchesVisible(notches_visible)
-        self.dial.setNotchesVisible(True)
 
     def on_value_changed(self, callback):
         if callable(callback):
