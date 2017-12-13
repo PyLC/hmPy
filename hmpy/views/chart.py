@@ -15,15 +15,15 @@ class LineChart(View):
     blue = Qt.blue
     yellow = Qt.yellow
 
-    def __init__(self, color, width):
-        super().__init__()
+    def __init__(self, color, line_width, scale=1):
+        super().__init__(scale)
         self.chart = QChart()
         self.view = QChartView(self.chart)
         self.view.setRenderHint(QPainter.Antialiasing)
         self.chart.legend().hide()
         self.view.setMinimumHeight(self.sizeHint().height())
         self.view.setMinimumWidth(self.sizeHint().width())
-        self.__init_line(color, width)
+        self.__init_line(color, line_width)
         self.chart.addSeries(self._area_series)
         self.chart.setAxisX(self._y_axis, self._area_series)
         self.chart.setAxisY(self._x_axis, self._area_series)
