@@ -23,12 +23,12 @@ class LineChart(View):
         self.chart.legend().hide()
         self.view.setMinimumHeight(self.sizeHint().height())
         self.view.setMinimumWidth(self.sizeHint().width())
-        self.__init_line(color, line_width)
+        self._init_line(color, line_width)
         self.chart.addSeries(self._area_series)
-        self.chart.setAxisX(self._y_axis, self._area_series)
-        self.chart.setAxisY(self._x_axis, self._area_series)
+        self.chart.setAxisX(self._x_axis, self._area_series)
+        self.chart.setAxisY(self._y_axis, self._area_series)
 
-    def __init_line(self, colour, width):
+    def _init_line(self, colour, width):
         self._line = QLineSeries()
         self._area_line = QLineSeries()
         self._area_series = QAreaSeries(self._line, self._area_line)
@@ -57,8 +57,8 @@ class LineChart(View):
 
     def add_data_to_line(self, x_data, y_data):
         """
-        Currently when data is added to line the line also changes the range of the axes in that chart in order to properly
-        display the data
+        Currently when data is added to line the line also changes the range of the axes in that chart in order to
+        properly display the data
         :param x_data Data (either list of single number), to add to the list
         :param y_data Data (either list or single number), to add to the list
         """
@@ -101,4 +101,4 @@ class LineChart(View):
                 minimum_x = i.x()
             elif i.x() > maximum_x:
                 maximum_x = i.x()
-        return minimum_y, maximum_y, minimum_x, minimum_y
+        return minimum_y, maximum_y, minimum_x, maximum_x
