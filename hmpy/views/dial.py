@@ -25,6 +25,11 @@ class DialView(View):
         self.dial.setNotchTarget(self.width() / 130.0)
         self.dial.setNotchesVisible(notches_visible)
 
+    def paintEvent(self, event):
+        size = event.rect().size()
+        if size != self.dial.size():
+            self.dial.resize(size)
+
     def on_value_changed(self, callback):
         if callable(callback):
             self.dial.valueChanged.connect(callback)
