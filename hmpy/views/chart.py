@@ -18,7 +18,7 @@ class LineChart(View):
     def __init__(self, color, line_width, scale=1):
         super().__init__(scale)
         self.chart = QChart()
-        self.view = QChartView(self.chart)
+        self.view = QChartView(self.chart, self)
         self.view.setRenderHint(QPainter.Antialiasing)
         self.chart.legend().hide()
         self.view.setMinimumHeight(self.sizeHint().height())
