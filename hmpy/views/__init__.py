@@ -5,6 +5,6 @@ from hmpy.views.lcd import LCDView
 from hmpy.views.led import LEDView
 from hmpy.views.switch import SwitchView
 from hmpy.views.view import View
-from hmpy.views.chart import LineChart
+from hmpy.views.chart import LineChartView
 
-__all__ = ["ButtonView", "DialView", "GaugeView", "LCDView", "LEDView", "LineChart", "SwitchView", "View"]
+__all__ = ["ButtonView", "DialView", "GaugeView", "LCDView", "LEDView", "LineChartView", "SwitchView", "View"]

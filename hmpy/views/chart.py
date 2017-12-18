@@ -6,7 +6,7 @@ from hmpy.views.view import View
 __author__ = "Kody Emm"
 
 
-class LineChart(View):
+class LineChartView(View):
     """Below are some basic colours for a line, extracted so that no QT components need to be called outside our API"""
     white = Qt.white
     black = Qt.black
