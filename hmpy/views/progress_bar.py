@@ -7,11 +7,11 @@ from enum import IntEnum
 class ProgressBarView(View):
     """View simulating a Progress Bar."""
 
-    _LINE_START_Y = 22.7
+    _LINE_START_Y = 23.9
     _LINE_START_X = 1
-    _MARK_SCALE = 80
-    _SCALE = 25
-    _PROGRESS_SCALE = 1600
+    _MARK_SCALE = 75
+    _FONT_SCALE = 22
+    _PROGRESS_SCALE = 1500
 
     class Orientation(IntEnum):
         HORIZONTAL = 0
@@ -198,7 +198,7 @@ class ProgressBarView(View):
         paint.setBrush(Qt.darkGray)
 
         if self._orientation == self.Orientation.VERTICAL:
-            paint.drawRect(QRect(12 * scale_x, 11 * scale_y,
+            paint.drawRect(QRect(12 * scale_x, 9 * scale_y,
                                  30 * scale_x, 65 * scale_y))
         else:
             paint.drawRect(QRect(4 * scale_x, 25 * scale_y,
@@ -214,8 +214,8 @@ class ProgressBarView(View):
         """
         paint.save()
 
-        scale_x = self.width() / self._SCALE
-        scale_y = self.height() / self._SCALE
+        scale_x = self.width() / self._FONT_SCALE
+        scale_y = self.height() / self._FONT_SCALE
 
         font_scale = scale_x if scale_x < scale_y\
             else scale_y
@@ -232,11 +232,11 @@ class ProgressBarView(View):
 
         if self._orientation == self.Orientation.VERTICAL:
             # draw the title
-            paint.drawText((scale_x * 16 - font_metric.width(text) / 2),
-                           scale_y * 4.4, "%s" % self._title)
+            paint.drawText((scale_x * 3 - font_metric.width(text) / 2),
+                           scale_y * 1.5, "%s" % self._title)
             # draw the value and unit text
-            paint.drawText((scale_x * 16 - font_metric.width(text) / 2),
-                           scale_y * 7, "%s %s" % (text, self._unit_text))
+            paint.drawText((scale_x * 10 - font_metric.width(text) / 2),
+                           scale_y * 1.6, "%s %s" % (text, self._unit_text))
         else:
             # draw the title
             paint.drawText(font_metric.width(text) / 2,
@@ -258,9 +258,9 @@ class ProgressBarView(View):
 
         paint.save()
 
-        smallest = self.width() / self._SCALE \
+        smallest = self.width() / self._FONT_SCALE \
             if self.width() < self.height() \
-            else self.height() / self._SCALE
+            else self.height() / self._FONT_SCALE
 
         font = QFont(self.font())
         font.setPixelSize(smallest / 25)
@@ -275,7 +275,7 @@ class ProgressBarView(View):
             line_x2 = 15 * scale_x
 
             for i in range(0, self._mark_count + 1):
-                y = self._LINE_START_Y * scale_y - i * scale_y * 4.34
+                y = self._LINE_START_Y * scale_y - i * scale_y * 4.33
                 if not i % 3:
                     text = self._pointText[int(i / 3)]
                     text_offset_x = font_metric.width(text) / 3
@@ -313,7 +313,7 @@ class ProgressBarView(View):
         scale_y = self.height() / self._PROGRESS_SCALE
 
         paint.save()
-        paint.translate(-12.5 * scale_x, self.height() / 2)
+        paint.translate(-12.5 * scale_x, self.height() / 2.5)
 
         paint.setBrush(self._color)
 
@@ -321,9 +321,9 @@ class ProgressBarView(View):
 
         if self._orientation == self.Orientation.VERTICAL:
             bar_width = scale_x * 600
-            bar_height = -(self.height() * 0.815) * progress
+            bar_height = -(self.height() * 0.855) * progress
 
-            paint.drawRect(QRect(255 * scale_x, 725 * scale_y, bar_width, bar_height))
+            paint.drawRect(QRect(255 * scale_x, 870 * scale_y, bar_width, bar_height))
         else:
             bar_height = scale_y * 600
             bar_width = (self.width() * 0.81) * progress
