@@ -1,12 +1,11 @@
 from .view import View
 from PyQt5.QtGui import QPainter, QPen, QColor, QFont, QFontMetrics
-from PyQt5.QtWidgets import QProgressBar
 from PyQt5.QtCore import Qt, QRect
 from enum import IntEnum
 
 
 class ProgressBarView(View):
-    """View simulating a Gauge."""
+    """View simulating a Progress Bar."""
 
     _LINE_START_Y = 55
     _LINE_START_X = 10
@@ -18,15 +17,20 @@ class ProgressBarView(View):
         HORIZONTAL = 0
         VERTICAL = 1
 
-    def __init__(self, title, value=0, unit_text="%",
-                 color=QColor(Qt.blue), min_value=0, max_value=100, precision=1,
+    def __init__(self, title="", value=0, unit_text="", color=QColor(Qt.blue),
+                 min_value=0, max_value=100, precision=1,
                  orientation=Orientation.HORIZONTAL):
-        """Initialize the view
-
-        :param value: current value
-        :param unit_text: text for displaying the unit currently in use
-        :param color: QColor indicating the color of the light.
-        :param parent: The parent QWidget.
+        """
+        Initialize the progress bar view
+        :param title: title text to display
+        :param value: the current value to display
+        :param unit_text: unit text to display
+        :param color: progress bar fill color
+        :param min_value: the minimum value
+        :param max_value: the maximum value
+        :param precision: precision of the values displayed
+        :param orientation: horizontal or vertical
+        :return:
         """
         super().__init__()
         self._title = title
@@ -34,12 +38,13 @@ class ProgressBarView(View):
         self._precision = precision
         self._orientation = orientation
         self._color = color
-        self.__min_value = min_value
-        self.__max_value = max_value
-        self._bar_value = min_value
         self._pointText = None
         self._mark_count = 15
-        self.__value = None
+        self._bar_value = None
+        self._min_value = min_value
+        self._max_value = min_value
+        self.max_value = max_value
+        self.min_value = min_value
         self.value = value
 
         self._create_text()
@@ -50,22 +55,21 @@ class ProgressBarView(View):
 
         :return: the value of the 'value' attribute.
         """
-        return self.__value
+        return self._value
 
     @value.setter
     def value(self, value):
         """Set 'value' class attribute, trigger repaint.
 
-        :param to: Boolean value.
+        :param value: float or integer value.
         """
-        if value < self.__min_value:
-            self._bar_value = self.__min_value
-        elif value > self.__max_value:
-            self._bar_value = self.__max_value
+        if value < self._min_value:
+            self._bar_value = self._min_value
+        elif value > self._max_value:
+            self._bar_value = self._max_value
         else:
             self._bar_value = value
-        self.__value = value
-
+        self._value = value
         self.repaint()
 
     @property
@@ -74,17 +78,19 @@ class ProgressBarView(View):
 
         :return: the value of the 'max_value' attribute.
         """
-        return self.__max_value
+        return self._max_value
 
     @max_value.setter
     def max_value(self, max_value):
         """Set 'max_value' class attribute, trigger repaint.
 
-        :param to: Boolean value.
+        :param max_value: float or integer value.
         """
-        self.__max_value = max_value
-        self._create_text()
+        if max_value <= self.min_value:
+            raise ValueError("Max value must be greater than min value")
+        self._max_value = max_value
 
+        self._create_text()
         self.repaint()
 
     @property
@@ -93,17 +99,19 @@ class ProgressBarView(View):
 
         :return: the value of the 'min_value' attribute.
         """
-        return self.__min_value
+        return self._min_value
 
     @min_value.setter
     def min_value(self, min_value):
         """Set 'min_value' class attribute, trigger repaint.
 
-        :param to: Boolean value.
+        :param min_value: float or integer value.
         """
-        self.__min_value = min_value
-        self._create_text()
+        if min_value >= self.max_value:
+            raise ValueError("Min value must be smaller than max value")
+        self._min_value = min_value
 
+        self._create_text()
         self.repaint()
 
     @property
@@ -134,7 +142,7 @@ class ProgressBarView(View):
     def title(self, title):
         """Set 'color' class attribute, trigger repaint.
 
-        :param to: QColor value
+        :param title: title text to display
         """
         self._title = title
         self.repaint()
@@ -168,14 +176,20 @@ class ProgressBarView(View):
 
     def _create_text(self):
         self._pointText = []
-        add = (self.__max_value - self.__min_value) / 5
-        value = self.__min_value
+        add = (self._max_value - self._min_value) / 5
+        value = self._min_value
 
         for i in range(0, 6):
             self._pointText.append(("%%.%df" % self._precision) % value)
             value += add
 
     def _draw_frame(self, paint):
+        """
+        Draw the frame of the progress bar
+
+        :param paint:
+        :return:
+        """
         scale_x = self.width() / self._MARK_SCALE
         scale_y = self.height() / self._MARK_SCALE
 
@@ -209,7 +223,7 @@ class ProgressBarView(View):
         paint.setFont(font)
         paint.setPen(QPen(Qt.black))
 
-        text = ("%%.%df" % self._precision) % self.__value
+        text = ("%%.%df" % self._precision) % self._value
 
         font_metric = QFontMetrics(font)
 
@@ -298,17 +312,15 @@ class ProgressBarView(View):
 
         paint.setBrush(self._color)
 
-        progress = (self._bar_value - self.__min_value) / (self.__max_value - self.__min_value)
+        progress = (self._bar_value - self._min_value) / (self._max_value - self._min_value)
 
         if self._orientation == self.Orientation.VERTICAL:
             bar_width = scale_x * 595
-
             bar_height = -(self.height() * 0.81) * progress
 
             paint.drawRect(QRect(250 * scale_x, 705 * scale_y, bar_width, bar_height))
         else:
             bar_height = scale_y * 590
-
             bar_width = (self.width() * 0.81) * progress
 
             paint.drawRect(QRect(96 * scale_x, -300 * scale_y, bar_width, bar_height))
