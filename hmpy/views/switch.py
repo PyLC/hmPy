@@ -144,7 +144,7 @@ class SwitchView(View):
     def paintEvent(self, event):
         """Draw the Switch graphic onto the view"""
         rect = self.rect()
-        size = QSize(rect.width()*.65,
-                     rect.height()*.75)
+        size = QSize(rect.width(),
+                     rect.height())
         if size != self._button.size():
             self._button.resize(size)
