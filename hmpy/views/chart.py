@@ -15,8 +15,8 @@ class LineChartView(View):
     blue = Qt.blue
     yellow = Qt.yellow
 
-    def __init__(self, color=Qt.red, line_width=1, scale=1):
-        super().__init__(x_scale=scale, y_scale=scale)
+    def __init__(self, color=Qt.red, line_width=1, x_scale=1, y_scale=1):
+        super().__init__(x_scale=x_scale, y_scale=y_scale)
         self.chart = QChart()
         self.view = QChartView(self.chart, self)
         self.view.setRenderHint(QPainter.Antialiasing)
