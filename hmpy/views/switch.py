@@ -15,7 +15,7 @@ class SwitchView(View):
         """Switch button component"""
         _SCALE = 100
 
-        def __init__(self, text, parent):
+        def __init__(self, parent, text=""):
             QAbstractButton.__init__(self, parent=parent)
             self.setCheckable(True)
             self._text = text
@@ -53,7 +53,7 @@ class SwitchView(View):
             image.fill(0)
 
             paint.begin(image)
-            paint.translate(self.width() / 4, 0)
+            paint.translate(self.width() / 4, self.height() / 55)
 
             # Set the border gradient
             border_gradient = QConicalGradient(rect.center(), -30)
@@ -84,7 +84,6 @@ class SwitchView(View):
                 paint.setBrush(Qt.red)
                 paint.drawRect(-5 * scale_x, 45 * scale_y,
                                55 * scale_x, 35 * scale_y)
-
                 paint.setBrush(Qt.darkRed)
                 paint.drawRect(-5 * scale_x, 70 * scale_y,
                                55 * scale_x, 10 * scale_y)
@@ -99,7 +98,7 @@ class SwitchView(View):
 
             paint.setPen(Qt.white)
 
-            paint.drawText(-55 * scale_x, 58 * scale_y, self._text)
+            paint.drawText(-55*scale_x, 58 * scale_y, self._text)
 
             paint.restore()
             paint.end()
@@ -107,12 +106,12 @@ class SwitchView(View):
             # Convert to pixmap and return
             return QPixmap.fromImage(image)
 
-    def __init__(self, text, on=False):
+    def __init__(self, text="", on=False):
         """Initialize the switch view.
 
         :param on: the state of the button"""
         super().__init__()
-        self._button = self._SwitchButton(text, self)
+        self._button = self._SwitchButton(self, text)
         self._button.setChecked(on)
 
     @property
@@ -127,21 +126,25 @@ class SwitchView(View):
         :param state:
         :return:
         """
-        if state != self._button.isChecked():
-            self._button.toggle()
+        # check if state changed
+        if state != self.on:
+            self.toggle()
 
     def toggle(self):
+        """Click the button to toggle the switch"""
         self._button.toggle()
 
     def on_toggle(self, callback):
         """Set callback for on click"""
         if callable(callback):
             self._button.toggled.connect(callback)
+        else:
+            raise ValueError("callback must be callable")
 
     def paintEvent(self, event):
         """Draw the Switch graphic onto the view"""
         rect = self.rect()
-        size = QSize(rect.width() * .65,
-                     rect.height() * .75)
+        size = QSize(rect.width()*.65,
+                     rect.height()*.75)
         if size != self._button.size():
             self._button.resize(size)
