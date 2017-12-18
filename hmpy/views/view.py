@@ -10,6 +10,7 @@ class View(QWidget):
         super().__init__(parent)
         self._x_scale = x_scale
         self._y_scale = y_scale
+
         self._resize()
 
     def _resize(self):
