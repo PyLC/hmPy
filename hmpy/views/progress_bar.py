@@ -218,7 +218,8 @@ class ProgressBarView(View):
         scale_y = self.height() / self._SCALE
 
         font_scale = scale_x if scale_x < scale_y\
-            else self.height() / self._SCALE
+            else scale_y
+        font_scale *= 2
 
         font = QFont(self.font())
         font.setPixelSize(font_scale)
@@ -231,17 +232,17 @@ class ProgressBarView(View):
 
         if self._orientation == self.Orientation.VERTICAL:
             # draw the title
-            paint.drawText((scale_x * 15 - font_metric.width(text) / 2),
+            paint.drawText((scale_x * 16 - font_metric.width(text) / 2),
                            scale_y * 4.4, "%s" % self._title)
             # draw the value and unit text
-            paint.drawText((scale_x * 15 - font_metric.width(text) / 2),
+            paint.drawText((scale_x * 16 - font_metric.width(text) / 2),
                            scale_y * 7, "%s %s" % (text, self._unit_text))
         else:
             # draw the title
-            paint.drawText((scale_x * 2 - font_metric.width(text) / 2),
+            paint.drawText(font_metric.width(text) / 2,
                            self.height() / 4, "%s" % self._title)
             # draw the value and unit text
-            paint.drawText((scale_x * 6 - font_metric.width(text) / 2),
+            paint.drawText((scale_x * 6.8 + font_metric.width(text) / 2),
                            self.height() / 4, "%s %s" % (text, self._unit_text))
         paint.restore()
 
@@ -274,7 +275,7 @@ class ProgressBarView(View):
             line_x2 = 15 * scale_x
 
             for i in range(0, self._mark_count + 1):
-                y = self._LINE_START_Y * scale_y - i * scale_y * 4.33
+                y = self._LINE_START_Y * scale_y - i * scale_y * 4.34
                 if not i % 3:
                     text = self._pointText[int(i / 3)]
                     text_offset_x = font_metric.width(text) / 3
@@ -320,7 +321,7 @@ class ProgressBarView(View):
 
         if self._orientation == self.Orientation.VERTICAL:
             bar_width = scale_x * 600
-            bar_height = -(self.height() * 0.81) * progress
+            bar_height = -(self.height() * 0.815) * progress
 
             paint.drawRect(QRect(255 * scale_x, 725 * scale_y, bar_width, bar_height))
         else:
