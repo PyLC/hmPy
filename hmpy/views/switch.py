@@ -98,7 +98,7 @@ class SwitchView(View):
 
             paint.setPen(Qt.white)
 
-            paint.drawText(-55*scale_x, 58 * scale_y, self._text)
+            paint.drawText(-55 * scale_x, 58 * scale_y, self._text)
 
             paint.restore()
             paint.end()
