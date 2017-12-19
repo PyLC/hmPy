@@ -7,7 +7,13 @@ __author__ = "Kody Emm"
 
 
 class LineChartView(View):
-    """Below are some basic colours for a line, extracted so that no QT components need to be called outside our API"""
+    """
+    LineChartView creates a view that contains a graph to show relationships between variables or change over time
+    The line chart will automatically resize it's axis to fit the min and max values. The chart self prunes earlier
+    points added, keeping it at 150 data points at the maximum
+    """
+
+    # Below are some basic colours for a line, extracted so that no QT components need to be called outside our API
     white = Qt.white
     black = Qt.black
     red = Qt.red
@@ -15,7 +21,7 @@ class LineChartView(View):
     blue = Qt.blue
     yellow = Qt.yellow
 
-    def __init__(self, color=Qt.red, line_width=1, x_scale=1, y_scale=1):
+    def __init__(self, color=Qt.red, line_width=1, x_scale=1, y_scale=1, title=""):
         super().__init__(x_scale=x_scale, y_scale=y_scale)
         self.chart = QChart()
         self.view = QChartView(self.chart, self)
@@ -27,6 +33,7 @@ class LineChartView(View):
         self.chart.addSeries(self._area_series)
         self.chart.setAxisX(self._x_axis, self._area_series)
         self.chart.setAxisY(self._y_axis, self._area_series)
+        self.set_title(title)
 
     def _init_line(self, colour, width):
         self._line = QLineSeries()
