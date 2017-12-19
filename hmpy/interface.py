@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt
 from hmpy.util.timer import Timer
 from hmpy.window import InterfaceWindow
 import os
@@ -24,11 +25,26 @@ class Interface:
         self._app.setWindowIcon(QIcon(ICON_PATH))
         self._root = InterfaceWindow()
         self._root.setWindowTitle(title)
+        self._windowState = Qt.WindowMaximized
         self._timers = []
+
+    def set_size(self, width, height):
+        """Set the window size
+
+        :param width: window width
+        :param height: window height"""
+        self._windowState = Qt.WindowNoState
+        self._root.setMinimumWidth(width)
+        self._root.setMinimumHeight(height)
+        self._root.setWindowState(self._windowState)
 
     def start(self):
         """Launch the GUI"""
-        self._root.showMaximized()
+        if self._windowState == Qt.WindowMaximized:
+            self._root.showMaximized()
+        else:
+            self._root.show()
+
         self._app.exec_()
 
     def after(self, delay, action):
