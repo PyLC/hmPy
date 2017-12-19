@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name="hmPy",
-    version="0.1.0",
+    version="0.2.0",
     description="A python library for generating human machine interfaces",
     long_description=read("README.rst"),
     url="https://github.com/PyLC/hmPy",
